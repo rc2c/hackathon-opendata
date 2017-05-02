@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * @file
+ * This module subdivides several core permissions
+ *
+ * @author Matt Chapman
+ * @copyright (c)2009-2012 Ninjitsu Technologies, Inc
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function system_perm_permission() {
+  $system_perms =  array(
+    'administer role permissions' => array(
+      'title' => t('administer role permissions'),
+      'description' => t('Allow users to set permissions'),
+    ),
+    'administer roles' => array(
+      'title' => t('administer roles'),
+      'description' => t('Administer roles'),
+    ),
+    'administer site information' => array(
+      'title' => t('Administer Site Information'),
+    ),
+    'administer modules' => array(
+      'title' => t('Administer modules'),
+    ),
+    'access site reports' => array(
+      'title' => t('View site reports'),
+    ),
+  );
+  $theme_perms = array();
+  // Loop through theme and dynamically add permission for each theme
+  foreach (list_themes() as $theme) {
+    $theme_perms += array("configure {$theme->name} theme" => array(
+                      'title' => t('manage ') . $theme->name,
+                      'description' => t('Theme configuration for ') . $theme->name,
+                      ),
+                    );
+  }
+  $perms = array_merge($system_perms, $theme_perms);
+
+  return $perms;
+}
+
+/**
+ * Implements hook_menu_alter().
+ *
+ * Add specific pages and the appropriate permissions to restrict access
+ */
+function system_perm_menu_alter(&$items) {
+  //permissions page - Allows to grant 'administer permissions' for assigning roles, but not change the permissions of roles
+  $items['admin/people/permissions']['access arguments'] = array('administer role permissions');
+
+  //roles
+  $items['admin/people/permissions/roles']['access arguments'] = array('administer roles');
+  $items['admin/people/permissions/roles/edit/%user_role']['access arguments'] = array('administer roles');
+  $items['admin/people/permissions/roles/delete/%user_role']['access arguments'] = array('administer roles');
+
+  //site-information page
+  $items['admin/config/system/site-information']['access arguments'] = array('administer site information');
+
+  //modules
+  $items['admin/modules']['access arguments'] = array('administer modules');
+  $items['admin/modules/uninstall']['access arguments'] = array('administer modules');
+  $items['admin/modules/uninstall/confirm']['access arguments'] = array('administer modules');
+
+  // Allow to configure a specific theme but not administer themes
+  $items['admin/appearance']['access arguments'] = array('administer themes');
+  $items['admin/appearance/settings']['access arguments'] = array('administer themes');
+
+  foreach (list_themes() as $theme) {
+    $items["admin/appearance/settings/{$theme->name}"]['access callback'] = 'user_access';
+    $items["admin/appearance/settings/{$theme->name}"]['access arguments'] = array("configure {$theme->name} theme");
+    $items["admin/appearance/settings/{$theme->name}"]['type'] = MENU_NORMAL_ITEM;
+    $items["admin/appearance/settings/{$theme->name}"]['title'] = 'Configure ' . $theme->info['name'];
+  }
+}

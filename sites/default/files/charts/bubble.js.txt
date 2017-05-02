@@ -1,0 +1,56 @@
+BubbleD3();
+
+function BubbleD3()
+{
+    // Config
+    var diameter = 500, //max size of the bubbles
+        color    = d3.scale.category20b(); //color category
+
+    var bubble = d3.layout.pack()
+        .sort(null)
+        .size([diameter, diameter])
+        .padding(1.5);
+
+    // Tooltip
+    $('<div>', {
+        class: 'chart-tooltip'
+    }).appendTo($('#%chartContainerId%'));
+
+    var svg = d3.select('#%chartContainerId% svg').attr('height', diameter);
+    var data = JSON.parse('%jsonData%');
+    data = data[0];
+
+    datanest = d3.nest()
+        .key(function(d) { return d.an_enfant_premier_prenom; })
+        .rollup(function(v) { return {
+                total: d3.sum(v, function(g) {return g.an_nombre; })
+            };
+        })
+        .entries(data);
+
+        datanest = datanest.filter(function(d) { if (d.values.total > 1) {return d; }});
+        datanest = datanest.map(function(d){ d.value =+ d.values.total; return d; });
+
+
+    //bubbles needs very specific format, convert data to this.
+    var nodes = bubble.nodes({children:datanest}).filter(function(d) { return !d.children; });
+
+    //setup the chart
+    var bubbles = svg.append("g")
+        .attr("transform", "translate(0,0)")
+        .selectAll(".bubble")
+        .data(nodes)
+        .enter();
+
+    //create the bubbles
+    bubbles.append("circle")
+        .attr("r", function(d){ return d.r; })
+        .attr("cx", function(d){ return d.x; })
+        .attr("cy", function(d){ return d.y; })
+        .style("fill", function(d) { return color(d.value); })
+        .on("mouseover", function(d) {
+            $('#%chartContainerId%').find('.chart-tooltip').html($('<p>', {
+                html: '<strong>'+ d.value +' '+ d.key +' né(e)s depuis 2015</strong>'
+            }));
+        });
+}

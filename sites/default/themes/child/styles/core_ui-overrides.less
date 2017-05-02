@@ -1,0 +1,147 @@
+/* ==========================================================================
+   DRUPAL
+   ========================================================================== */
+
+#skip-link {
+  margin: 0;
+}
+#admin-menu {
+	z-index: 99999;
+}
+html.js fieldset.collapsed {
+	height: auto;
+}
+a.tabledrag-handle .handle {
+	width: 24px;
+	height: 24px;
+}
+
+
+/* ==========================================================================
+    NEW ELEMENTS
+   ========================================================================== */
+
+.page-header {
+    padding: 1rem 0;
+    background: #fff;
+    border-bottom: 1px solid #d1d4d7;
+    border-left: 5px solid #63c2de;
+
+    h1 {
+    	margin: 0 0 0 -10px;
+    }
+}
+.site-slogan {
+  line-height: 54px;
+
+  @media (max-width: 991px) {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+    CORE UI
+   ========================================================================== */
+
+// CARDS
+
+.card-header .card-title {
+	margin-bottom: 0;
+}
+.card-block > .page-title {
+	margin: 0;
+}
+.card-title a {
+  color: inherit;
+
+  &:hover {
+    text-decoration: none;
+    color: @color-secondary;
+  }
+}
+
+.node-toolbar {
+  .btn {
+    text-align: right;
+    color: inherit;
+  }
+}
+
+.card-user {
+  .h1 {
+    text-align: right;
+  }
+  img {
+    border-radius: 50%;
+  }
+}
+
+// NAV
+
+.nav-user {
+	margin-right: 2rem;
+  margin-left: 1rem;
+}
+.nav-link-user img {
+  max-width: 35px;
+  border-radius: 50%;
+}
+.navbar-nav .nav-link, 
+.navbar-nav .navbar .dropdown-toggle, 
+.navbar .navbar-nav .dropdown-toggle {
+  color: rgba(0,0,0,.6);
+
+  &:hover {
+    color: @color-secondary;
+  }
+}
+
+.nav--main {
+  margin-left: auto;
+}
+
+.dropdown-menu {
+  min-width: 13rem;
+}
+
+
+// FOOTER
+
+.app-footer .navbar-nav {
+	flex-direction: row;
+    align-items: center;
+}
+.app-footer .nav-link {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+// LOGO
+
+header.navbar .navbar-brand {
+	//background: #fff;
+  width: 200px;
+  background-image: url("../../images/logo-mini.png");
+  background-image: url("../../images/logo.svg");
+  background-size: 85% auto;
+
+  @media (max-width: 991px) {
+    background-size: auto 80%;
+  }
+}
+.navbar-brand img {
+	display: none;
+}
+// header.navbar .navbar-brand {
+// 	width: 200px;
+//     height: 101px;
+// 	background: #fff;
+// 	text-align: center;
+// }
+// .navbar-brand img {
+// 	/*height: 100%;*/
+// 	height: 80px;
+// }
+// .app-body .sidebar {
+// 	margin-top: 46px;
+// }

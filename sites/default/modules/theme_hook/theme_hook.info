@@ -1,0 +1,5 @@
+name = THEME - Hook
+description = Gestion des hooks
+package = THEME
+version = VERSION
+core = 7.x

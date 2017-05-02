@@ -1,0 +1,193 @@
+<?php
+
+/**
+ * INCLUDES
+ */
+module_load_include('inc', 'hackaton_api_connectors', 'classes/larochelle.class');
+module_load_include('inc', 'hackaton_api_connectors', 'classes/csv.class');
+
+
+/**
+ * Hook menu (affichage)
+ * @return array              [description]
+ */
+function hackaton_api_connectors_menu()
+{
+    $items = array();
+
+    $items['hackathon-api/%/call/%'] = array(
+        'title' => 'Récupération des données via API Hackathon',
+        'page callback'     => '_hackaton_api_connectors_ajax',
+        'page arguments'    => array(1,3,4),
+        'access callback'   => TRUE,
+        'type'              => MENU_CALLBACK
+    );
+    $items['hackathon-thematic-data/%'] = array(
+        'title' => 'Récupération des données d\'une thématique',
+        'page callback'     => '_hackaton_thematic_data_ajax',
+        'page arguments'    => array(1),
+        'access callback'   => TRUE,
+        'type'              => MENU_CALLBACK
+    );
+
+    return $items;
+}
+
+/**
+ * Handler ajax hackathon-api
+ *
+ * @param  [type] $classSubname [description]
+ * @param  [type] $method       [description]
+ * @param  [type] $args         [description]
+ * @return array
+ */
+function _hackaton_api_connectors_ajax($classSubname, $method, $args = null)
+{
+    $className = 'APIConnector_' . $classSubname;
+    $results = array();
+
+    if (class_exists($className)) {
+        $API = new $className;
+
+        $args = explode(',', $args);
+        $results = call_user_func_array(array($API,$method), $args);
+    }
+
+    echo json_encode($results);
+}
+
+/**
+ * Handler ajax hackathon-thematic-data
+ *
+ * @param  int $termId Identifiant du terme de taxonomie
+ * @return json
+ */
+function _hackaton_thematic_data_ajax($termId)
+{
+    $results = '{}';
+
+    if ($term = taxonomy_term_load($termId)) {
+        $drupTerm = new DrupTerm($term);
+
+        if (!empty($drupTerm->getData()->field_thematique_datas[LANGUAGE_NONE][0]['value'])) {
+            $results = $drupTerm->getData()->field_thematique_datas[LANGUAGE_NONE][0]['value'];
+        }
+    }
+
+    echo $results;
+}
+
+/**
+ * 
+ */
+function hackaton_api_connectors_get_multiple_columns($jsonDatas)
+{
+    $datas = json_decode($jsonDatas);
+    $results = array();
+
+    foreach ($datas as $classSubname => $bases) {
+
+        if (!empty($bases)) {
+            $className = 'APIConnector_' . $classSubname;
+            if (class_exists($className)) {
+                $API = new $className;
+
+                foreach ($bases as $baseId => $tables) {
+                    if (!empty($tables)) {
+                        foreach ($tables as $tableId => $columnsAllowed) {
+                            $results[] = $API->getValues($baseId, $tableId, $columnsAllowed);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return $results;
+}
+
+/**
+ * Hook form (affichage)
+ * @param  [type] &$form       [description]
+ * @param  [type] &$form_state [description]
+ * @param  [type] $form_id     [description]
+ * @return [type]              [description]
+ */
+function hackaton_api_connectors_form_alter(&$form, &$form_state, $form_id)
+{
+
+    // Media scald
+    if ($form_id === 'taxonomy_form_term') {
+
+        if (isset($form['field_thematique_datasources'])) {
+            // Ajout du type de donnée
+            $form['field_thematique_datasources'][LANGUAGE_NONE]['#attributes']['data-type'] = 'source';
+
+        	/*$datasourceNodes = db_query("
+        		SELECT field_data_id_value, title
+        		FROM node as n INNER JOIN field_data_field_data_id as did
+        		ON n.nid = did.entity_id
+        		WHERE type='datasource'"
+        	)->fetchAllKeyed();*/
+        	//$datasourceNodes = db_query("SELECT nid, title FROM node where type='datasource'")->fetchAllKeyed();
+
+            //$form['field_thematique_datasources'][LANGUAGE_NONE]['#options'] = $datasourceNodes;
+
+            /*$form['field_thematique_datasources'][LANGUAGE_NONE]['#suffix'] = '<div id="datasources_bases"></div>';
+            $form['field_thematique_datasources'][LANGUAGE_NONE]['#ajax'] = array(
+                'callback' => 'hackaton_api_connectors_datasources_getBases',
+                'wrapper' => 'datasources_bases',
+                'effect' => 'slide',
+                'method' => 'html',
+                'event' => 'load change',
+                'prevent' => 'load change'
+            );
+
+            $form['datas'] = array(
+                '#type' => 'container'
+            );*/
+            /*foreach ($datasourceNodes as $datasourceId => $datasourceTitle) {
+                $form['datas']['datas_'.$datasourceId] = array(
+                    '#type' => 'textfield',
+                    '#title' => $datasourceTitle,
+                    '#attributes' => array(
+                        'id' => 'datas-'.$datasourceId
+                    )
+                );
+            }*/
+
+            //$form['#submit'][] = 'hackaton_api_connectors_form_submit';
+        }
+    }
+}
+function hackaton_api_connectors_datasources_getBases($form, $form_state)
+{
+    $output = '';
+
+    foreach ($form_state['values']['field_thematique_datasources'][LANGUAGE_NONE] as $index => $classSubname) {
+
+        if (is_array($classSubname)) {
+            $className = 'APIConnector_' . $classSubname['value'];
+
+            $output .= '<h2>'.$className.'</h2>';
+
+        	if (class_exists($className)) {
+                $API = new $className;
+                if ($bases = $API->getBases()) {
+                	foreach ($bases as $base) {
+        				$output .= '<div class="form-item form-type-checkbox">
+        					<input type="checkbox" name="database" value="'.$base.'"/>
+        					<label>'.$base.'</label>
+        				</div>';
+                	}
+                }
+            }
+        }
+    }
+    return $output;
+}
+
+function hackaton_api_connectors_form_submit($form, &$form_state)
+{
+    var_dump($form_state['values']); die;
+}

@@ -1,0 +1,52 @@
+<?php
+/**
+ * INCLUDES
+ */
+module_load_include('inc', 'theme_hook', 'includes/breadcrumb');
+module_load_include('inc', 'theme_hook', 'includes/site-infos');
+module_load_include('inc', 'theme_hook', 'includes/user');
+module_load_include('inc', 'theme_hook', 'includes/data');
+module_load_include('inc', 'theme_hook', 'includes/chart');
+
+/**
+ * Hook page alter
+ */
+function theme_hook_page_alter(&$page)
+{
+    // Fil d'ariane pour la taxonomie
+    // if (Rc2cTools::isTermView()) {
+    //     $breadcrumb = array();
+    //     $term       = taxonomy_term_load(arg(2));
+    //     $vocabulary = taxonomy_vocabulary_machine_name_load($term->vocabulary_machine_name);
+    // }
+}
+
+/**
+ * Hook node view
+ */
+function theme_hook_node_view($node, $view_mode, $langcode)
+{
+    // if (Rc2cTools::isNodeView()) {
+
+    // }
+}
+
+/**
+ * Hook form (affichage)
+ * @param  [type] &$form       [description]
+ * @param  [type] &$form_state [description]
+ * @param  [type] $form_id     [description]
+ * @return [type]              [description]
+ */
+function theme_hook_form_alter(&$form, &$form_state, $form_id)
+{
+    if ($form_id === 'user_profile_form') {
+        ThemeUser::formProfileAlter($form, $form_state);
+    }
+    if ($form_id === 'data_node_form') {
+        ThemeData::formAlter($form, $form_state);
+    }
+    if ($form_id === 'dataviz_node_form') {
+        ThemeChart::formAlter($form, $form_state);
+    }
+}

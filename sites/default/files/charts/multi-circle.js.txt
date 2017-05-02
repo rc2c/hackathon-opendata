@@ -1,0 +1,554 @@
+/**
+ * Config
+ */
+var Idcontainer= "1"
+var file_depense = "/sites/default/files/charts/budget_depense3.csv";
+var containerHeight = 800; //600
+var radius = containerHeight /2.5;
+var b = { w: 300, h: 30, s: 3, t: 10 }; // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
+var li = { w: 230, h: 45, s: 2, r: 10}; // Dimensions of legend item: width, height, spacing, radius of rounded rect.
+var multicircleDefinitions = {
+    '02'  : {id:'02', color:'#666', legend:'02'},
+    '023' : {id:'023', color:'#666', legend:'023'},
+    '10'  : {id:'10', color:'#666', legend:'10'},
+    '102' : {id:'102', color:'#666', legend:'102'},
+    '1022': {id:'1022', color:'#666', legend:'1022'},
+    '13'  : {id:'13', color:'#666', legend:'13'},
+    '131' : {id:'131', color:'#666', legend:'131'},
+    '1311': {id:'1311', color:'#666', legend:'1311'},
+    '139' : {id:'139', color:'#666', legend:'139'},
+    '1391': {id:'1391', color:'#666', legend:'1391'},
+    '1393': {id:'1393', color:'#666', legend:'1393'},
+    '16'  : {id:'16', color:'#666', legend:'16'},
+    '164' : {id:'164', color:'#666', legend:'164'},
+    '1641': {id:'1641', color:'#666', legend:'1641'},
+    '1644': {id:'1644', color:'#666', legend:'1644'},
+    '165' : {id:'165', color:'#666', legend:'165'},
+    '168' : {id:'168', color:'#666', legend:'168'},
+    '1681': {id:'1681', color:'#666', legend:'1681'},
+    '20'  : {id:'20', color:'#666', legend:'20'},
+    '203' : {id:'203', color:'#666', legend:'203'},
+    '2031': {id:'2031', color:'#666', legend:'2031'},
+    '204' : {id:'204', color:'#666', legend:'204'},
+    '2041': {id:'2041', color:'#666', legend:'2041'},
+    '2042': {id:'2042', color:'#666', legend:'2042'},
+    '205' : {id:'205', color:'#666', legend:'205'},
+    '2051': {id:'2051', color:'#666', legend:'2051'},
+    '208' : {id:'208', color:'#666', legend:'208'},
+    '2088': {id:'2088', color:'#666', legend:'2088'},
+    '21'  : {id:'21', color:'#666', legend:'21'},
+    '211' : {id:'211', color:'#666', legend:'211'},
+    '2111': {id:'2111', color:'#666', legend:'2111'},
+    '2118': {id:'2118', color:'#666', legend:'2118'},
+    '212' : {id:'212', color:'#666', legend:'212'},
+    '2121': {id:'2121', color:'#666', legend:'2121'},
+    '213' : {id:'213', color:'#666', legend:'213'},
+    '2138': {id:'2138', color:'#666', legend:'2138'},
+    '214' : {id:'214', color:'#666', legend:'214'},
+    '2141': {id:'2141', color:'#666', legend:'2141'},
+    '2145': {id:'2145', color:'#666', legend:'2145'},
+    '215' : {id:'215', color:'#666', legend:'215'},
+    '2151': {id:'2151', color:'#666', legend:'2151'},
+    '2152': {id:'2152', color:'#666', legend:'2152'},
+    '2153': {id:'2153', color:'#666', legend:'2153'},
+    '2154': {id:'2154', color:'#666', legend:'2154'},
+    '2156': {id:'2156', color:'#666', legend:'2156'},
+    '2157': {id:'2157', color:'#666', legend:'2157'},
+    '2158': {id:'2158', color:'#666', legend:'2158'},
+    '216' : {id:'216', color:'#666', legend:'216'},
+    '2161': {id:'2161', color:'#666', legend:'2161'},
+    '218' : {id:'218', color:'#666', legend:'218'},
+    '2181': {id:'2181', color:'#666', legend:'2181'},
+    '2182': {id:'2182', color:'#666', legend:'2182'},
+    '2183': {id:'2183', color:'#666', legend:'2183'},
+    '2184': {id:'2184', color:'#666', legend:'2184'},
+    '2185': {id:'2185', color:'#666', legend:'2185'},
+    '2188': {id:'2188', color:'#666', legend:'2188'},
+    '23'  : {id:'23', color:'#005544', legend:'Immobilisations en cours'},
+    '231' : {id:'231', color:'#0E715D', legend:'Immobilisations corporelles en cours'},
+    '2312': {id:'2312', color:'#1C8D77', legend:'Terrains'},
+    '2313': {id:'2313', color:'#2AAA90', legend:'Constructions'},
+    '2315': {id:'2315', color:'#38C6AA', legend:'Installations, matériel et outillage techniques'},
+    '2316': {id:'2316', color:'#46E2C3', legend:'Restauration des collections et œuvres d\'art'},
+    '2318': {id:'2318', color:'#55FFDD', legend:'Autres immobilisations corporelles en cours'},
+    '60'  : {id:'60', color:'#666', legend:'60'},
+    '602' : {id:'602', color:'#666', legend:'602'},
+    '6021': {id:'6021', color:'#666', legend:'6021'},
+    '6022': {id:'6022', color:'#666', legend:'6022'},
+    '604' : {id:'604', color:'#666', legend:'604'},
+    '6045': {id:'6045', color:'#666', legend:'6045'},
+    '605' : {id:'605', color:'#666', legend:'605'},
+    '606' : {id:'606', color:'#666', legend:'606'},
+    '6061': {id:'6061', color:'#666', legend:'6061'},
+    '6062': {id:'6062', color:'#666', legend:'6062'},
+    '6063': {id:'6063', color:'#666', legend:'6063'},
+    '6064': {id:'6064', color:'#666', legend:'6064'},
+    '6065': {id:'6065', color:'#666', legend:'6065'},
+    '6066': {id:'6066', color:'#666', legend:'6066'},
+    '6067': {id:'6067', color:'#666', legend:'6067'},
+    '6068': {id:'6068', color:'#666', legend:'6068'},
+    '608' : {id:'608', color:'#666', legend:'608'},
+    '61'  : {id:'61', color:'#666', legend:'61'},
+    '611' : {id:'611', color:'#666', legend:'611'},
+    '613' : {id:'613', color:'#666', legend:'613'},
+    '6132': {id:'6132', color:'#666', legend:'6132'},
+    '6135': {id:'6135', color:'#666', legend:'6135'},
+    '614' : {id:'614', color:'#666', legend:'614'},
+    '615' : {id:'615', color:'#666', legend:'615'},
+    '6152': {id:'6152', color:'#666', legend:'6152'},
+    '6155': {id:'6155', color:'#666', legend:'6155'},
+    '6156': {id:'6156', color:'#666', legend:'6156'},
+    '616' : {id:'616', color:'#666', legend:'616'},
+    '6161': {id:'6161', color:'#666', legend:'6161'},
+    '617' : {id:'617', color:'#666', legend:'617'},
+    '618' : {id:'618', color:'#666', legend:'618'},
+    '6182': {id:'6182', color:'#666', legend:'6182'},
+    '6184': {id:'6184', color:'#666', legend:'6184'},
+    '6185': {id:'6185', color:'#666', legend:'6185'},
+    '6188': {id:'6188', color:'#666', legend:'6188'},
+    '62'  : {id:'62', color:'#666', legend:'62'},
+    '621' : {id:'621', color:'#666', legend:'621'},
+    '6218': {id:'6218', color:'#666', legend:'6218'},
+    '622' : {id:'622', color:'#666', legend:'622'},
+    '6225': {id:'6225', color:'#666', legend:'6225'},
+    '6226': {id:'6226', color:'#666', legend:'6226'},
+    '6228': {id:'6228', color:'#666', legend:'6228'},
+    '623' : {id:'623', color:'#666', legend:'623'},
+    '6231': {id:'6231', color:'#666', legend:'6231'},
+    '6232': {id:'6232', color:'#666', legend:'6232'},
+    '6236': {id:'6236', color:'#666', legend:'6236'},
+    '6237': {id:'6237', color:'#666', legend:'6237'},
+    '6238': {id:'6238', color:'#666', legend:'6238'},
+    '624' : {id:'624', color:'#666', legend:'624'},
+    '6241': {id:'6241', color:'#666', legend:'6241'},
+    '6247': {id:'6247', color:'#666', legend:'6247'},
+    '6248': {id:'6248', color:'#666', legend:'6248'},
+    '625' : {id:'625', color:'#666', legend:'625'},
+    '6251': {id:'6251', color:'#666', legend:'6251'},
+    '6255': {id:'6255', color:'#666', legend:'6255'},
+    '6256': {id:'6256', color:'#666', legend:'6256'},
+    '6257': {id:'6257', color:'#666', legend:'6257'},
+    '626' : {id:'626', color:'#666', legend:'626'},
+    '6261': {id:'6261', color:'#666', legend:'6261'},
+    '6262': {id:'6262', color:'#666', legend:'6262'},
+    '627' : {id:'627', color:'#666', legend:'627'},
+    '628' : {id:'628', color:'#666', legend:'628'},
+    '6281': {id:'6281', color:'#666', legend:'6281'},
+    '6282': {id:'6282', color:'#666', legend:'6282'},
+    '6283': {id:'6283', color:'#666', legend:'6283'},
+    '6287': {id:'6287', color:'#666', legend:'6287'},
+    '6288': {id:'6288', color:'#666', legend:'6288'},
+    '63'  : {id:'63', color:'#666', legend:'63'},
+    '633' : {id:'633', color:'#666', legend:'633'},
+    '6331': {id:'6331', color:'#666', legend:'6331'},
+    '6332': {id:'6332', color:'#666', legend:'6332'},
+    '6336': {id:'6336', color:'#666', legend:'6336'},
+    '6338': {id:'6338', color:'#666', legend:'6338'},
+    '635' : {id:'635', color:'#666', legend:'635'},
+    '6351': {id:'6351', color:'#666', legend:'6351'},
+    '6355': {id:'6355', color:'#666', legend:'6355'},
+    '6358': {id:'6358', color:'#666', legend:'6358'},
+    '637' : {id:'637', color:'#666', legend:'637'},
+    '6371': {id:'6371', color:'#666', legend:'6371'},
+    '64'  : {id:'64', color:'#003380', legend:'Charges de pers.'},
+    '641' : {id:'641', color:'#0A3C87', legend:'Rémunérations du personnel'},
+    '6411': {id:'6411', color:'#3260A5', legend:'Personnel titulaire'},
+    '6413': {id:'6413', color:'#3B69AC', legend:'Personnel non titulaire'},
+    '6414': {id:'6414', color:'#4572B4', legend:'Emplois d’insertion'},
+    '6416': {id:'6416', color:'#507BBB', legend:'6416'},
+    '6417': {id:'6417', color:'#5984C3', legend:'6417'},
+    '645' : {id:'645', color:'#14458E', legend:'Charges de sécurité sociale et de prévoyance'},
+    '6451': {id:'6451', color:'#648DCA', legend:'Cotisations à l\'U.R.S.S.A.F'},
+    '6453': {id:'6453', color:'#6E96D2', legend:'Cotisations aux caisses de retraites'},
+    '6455': {id:'6455', color:'#779FD9', legend:'6455'},
+    '6456': {id:'6456', color:'#82A8E1', legend:'6456'},
+    '647' : {id:'647', color:'#1D4E96', legend:'Autres charges sociales'},
+    '6473': {id:'6473', color:'#8BB1E8', legend:'6473'},
+    '6474': {id:'6474', color:'#95BAF0', legend:'6474'},
+    '6478': {id:'6478', color:'#A0C3F7', legend:'6478'},
+    '648' : {id:'648', color:'#28579D', legend:'648'},
+    '6488': {id:'6488', color:'#A0C3F7', legend:'6488'},
+    '65'  : {id:'65', color:'#AA4400', legend:'Autres charges de gestion courante'},
+    '651' : {id:'651', color:'#666', legend:'651'},
+    '653' : {id:'653', color:'#666', legend:'653'},
+    '6531': {id:'6531', color:'#666', legend:'6531'},
+    '6532': {id:'6532', color:'#666', legend:'6532'},
+    '6533': {id:'6533', color:'#666', legend:'6533'},
+    '6534': {id:'6534', color:'#666', legend:'6534'},
+    '6535': {id:'6535', color:'#666', legend:'6535'},
+    '6536': {id:'6536', color:'#666', legend:'6536'},
+    '654' : {id:'654', color:'#666', legend:'654'},
+    '6541': {id:'6541', color:'#666', legend:'6541'},
+    '655' : {id:'655', color:'#666', legend:'655'},
+    '6558': {id:'6558', color:'#666', legend:'6558'},
+    '657' : {id:'657', color:'#B45515', legend:'Subventions de fonctionnement versées'},
+    '6573': {id:'6573', color:'#DF996A', legend:'aux organismes publics'},
+    '6574': {id:'6574', color:'#D48855', legend:'aux associations et autres personnes de droit privé'},
+    '658' : {id:'658', color:'#BF662A', legend:'658'},
+    '66'  : {id:'66', color:'#666', legend:'66'},
+    '661' : {id:'661', color:'#666', legend:'661'},
+    '6611': {id:'6611', color:'#666', legend:'6611'},
+    '6615': {id:'6615', color:'#666', legend:'6615'},
+    '67'  : {id:'67', color:'#666', legend:'67'},
+    '671' : {id:'671', color:'#666', legend:'671'},
+    '6711': {id:'6711', color:'#666', legend:'6711'},
+    '6713': {id:'6713', color:'#666', legend:'6713'},
+    '6714': {id:'6714', color:'#666', legend:'6714'},
+    '6718': {id:'6718', color:'#666', legend:'6718'},
+    '673' : {id:'673', color:'#666', legend:'673'},
+    '674' : {id:'674', color:'#666', legend:'674'},
+    '6742': {id:'6742', color:'#666', legend:'6742'},
+    '6744': {id:'6744', color:'#666', legend:'6744'},
+    '678' : {id:'678', color:'#666', legend:'678'},
+    '68'  : {id:'68', color:'#447821', legend:'Dotations aux amortissements et provision'},
+    '681' : {id:'681', color:'#68B57B', legend:'Charges de fonctionnement courant'},
+    '6811': {id:'6811', color:'#8DF3D5', legend:'immobilisations incorporelles et corporelles'},
+    '69'  : {id:'69', color:'#666', legend:'69'},
+    '695' : {id:'695', color:'#666', legend:'695'},
+    '70'  : {id:'70', color:'#666', legend:'70'},
+    '701' : {id:'701', color:'#666', legend:'701'},
+    '7012': {id:'7012', color:'#666', legend:'7012'},
+    '706' : {id:'706', color:'#666', legend:'706'},
+    '7061': {id:'7061', color:'#666', legend:'7061'},
+    '73'  : {id:'73', color:'#666', legend:'73'},
+    '739' : {id:'739', color:'#666', legend:'739'},
+    '7392': {id:'7392', color:'#666', legend:'7392'}
+};
+
+/**
+ * Container
+ */
+var chartContainerId = $('#%chartContainerId%');
+
+var windowssequence = $('<div>', {
+    id: 'sequence',
+    class: 'sequence'
+});
+windowssequence.css({position: "absolute","z-index":"100",top: "50px", left: "10px","font-size": "12px","fill":"#FFF","font-weight": "bold","font-family":"Raleway"});
+windowssequence.appendTo(chartContainerId);
+
+var windowsexplanation = $('<div>', {id : 'explanation', class : 'explanation'});
+windowsexplanation.css({position: "absolute","z-index":"100" ,top: "20px",left: "40px",width: "140px","text-align": "center", color: "#666", "z-index" : "-1", "font-size": "2.0em"});
+windowsexplanation.appendTo(chartContainerId);
+
+var windowspercentage = $('<div>', {id : 'percentage', class : 'percentage'});
+windowspercentage.css({position: "absolute","z-index":"100",top: "150px",left: "60px","font-size": "2.0em","text-align": "center","font-weight": "bold", color: "#666","font-family":"Raleway","font-size": "3.0em"});
+windowspercentage.appendTo(chartContainerId);
+
+var windowschart = $('<div>', {id : '%chartId%', class : 'chart'});
+windowschart.css({position: "absolute",top: "50px",left: "50px"});
+windowschart.appendTo(chartContainerId);
+
+/**
+ * Init
+ */
+MultiCircleD3();
+$('#%chartFormId%').find('.form-radio').on('change', MultiCircleD3);
+
+/**
+ * CHART
+ */
+function MultiCircleD3()
+{
+    $("#sequence svg").remove();
+    $('#%chartContainerId% svg').empty();
+    $("#explanation svg").remove();
+    $("#percentage svg").remove();
+
+    var iType = $('#%chartFormId% .form-radio:checked').val();
+    var list_var = ['02','60','61','62','63','64','65','66','67','68','73','10','13','16','20','21','23','70','69','023','602','605','606','611','613','614','615','616','617','618','621','622','623','624','625','626','627','628','633','635','641','645','647','648','651','653','654','655','657','661','671','673','674','678','681','739','102','139','164','165','168','203','204','205','208','211','212','213','215','216','218','231','637','658','701','706','131','695','214','604','608','6021','6022','6061','6062','6063','6064','6065','6067','6068','6132','6135','6152','6155','6156','6161','6182','6184','6185','6188','6218','6225','6226','6228','6231','6232','6236','6237','6238','6241','6247','6248','6251','6255','6256','6257','6261','6262','6281','6282','6283','6287','6288','6331','6332','6336','6338','6351','6355','6358','6411','6413','6416','6417','6451','6453','6455','6456','6473','6474','6478','6488','6531','6532','6533','6534','6535','6536','6541','6558','6573','6574','6611','6615','6711','6713','6714','6718','6744','6811','7392','1022','1391','1641','1644','1681','2031','2041','2042','2051','2088','2111','2118','2121','2138','2152','2153','2156','2157','2158','2161','2181','2182','2183','2184','2185','2188','2313','2316','2318','6066','6371','6414','6742','7012','7061','1311','2151','2154','2312','2315','1393','2141','2145','6045'];
+    var file = file_depense;
+    var colors = {};
+    for (i = 0; i < list_var.length; i++) {
+        colors[list_var[i]] = multicircleDefinitions[list_var[i]].color;
+    }
+
+    // Hack to make this example display correctly in an iframe on bl.ocks.org
+    d3.select(self.frameElement).style('height', containerHeight + 'px');
+
+    // trajet.
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Total size of all segments; we set this later, after loading the data.
+    var totalSize = 0;
+
+    var vis = d3.select('#%chartContainerId%').append('svg')
+       .attr('height', containerHeight)
+       .append("g")
+       .attr("transform", "translate(" + containerHeight / 2 + "," + containerHeight / 2 + ")");
+
+    var partition = d3.layout.partition()
+       .size([2 * Math.PI, radius * radius])
+       .value(function(d) { return d.size; });
+
+    var arc = d3.svg.arc()
+       .startAngle(function(d) { return d.x; })
+       .endAngle(function(d) { return d.x + d.dx; })
+       .innerRadius(function(d) { return Math.sqrt(d.y); })
+       .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
+
+    d3.text(file, function(text) {
+       var csv = d3.csv.parseRows(text);
+       var json = buildHierarchy(csv);
+       createVisualization(json);
+    });
+
+    //------------------------------------------------------
+    // Main function to draw and set up the visualization, once we have the data.
+    function createVisualization(json) {
+
+        // Basic setup of page elements.
+        initializeBreadcrumbTrail();
+        drawLegend();
+        d3.select("#togglelegend");//.on("click", toggleLegend);
+
+      // Bounding circle underneath the sunburst, to make it easier to detect
+      // when the mouse leaves the parent g.
+      vis.append("svg:circle")
+           .attr("id","boucles")
+          .attr("r", radius)
+          .style("opacity", 0);
+
+      // For efficiency, filter nodes to keep only those large enough to see.
+      var nodes = partition.nodes(json)
+          .filter(function(d) {
+          return (d.dx > 0.005); // 0.005 radians = 0.29 degrees
+          });
+
+      var path = vis.data([json]).selectAll("path")
+          .data(nodes)
+          .enter().append("svg:path")
+          .attr("display", function(d) { return d.depth ? null : "none"; })
+          .attr("d", arc)
+          .attr("fill-rule", "evenodd")
+          .style("fill", function(d) { return colors[d.name]; })
+          .style("opacity", 1)
+          .on("mouseover", mouseover);
+
+      // Add the mouseleave handler to the bounding circle.
+      d3.select("#container").on("mouseleave", mouseleave);
+     // Get total size of the tree = value of root node from partition.
+      totalSize = path.node().__data__.value;
+     };
+
+    //------------------------------------------------------
+    // Fade all but the current sequence, and show it in the breadcrumb trail.
+    function mouseover(d) {
+        arrond = d3.format(".4r");
+        arrond2 = d3.format(".2r");
+        var percentage = (100 * d.value / totalSize).toPrecision(3);
+        var percentageString = arrond2(percentage) + "%";// ("+d.value+"/"+totalSize+")";
+        var percentageString2 = arrond(d.value) +" / "+ arrond(totalSize) +" boucles";
+        if (percentage < 1) { percentageString = "<1%"; }
+
+        d3.select("#percentage").text(percentageString);
+        d3.select("#percentage").style("visibility", "");
+        d3.select("#explanation").style("visibility", "");
+        var sequenceArray = getAncestors(d);
+        updateBreadcrumbs(sequenceArray, percentageString2);
+
+        // Fade all the segments.
+        d3.selectAll("path").style("opacity", 0.3);
+        // Then highlight only those that are an ancestor of the current segment.
+        vis.selectAll("path")
+           .filter(function(node) {return (sequenceArray.indexOf(node) >= 0);})
+           .style("opacity", 1);
+    }
+
+    //------------------------------------------------------
+    // Restore everything to full opacity when moving off the visualization.
+    function mouseleave(d) {
+
+      // Hide the breadcrumb trail
+      d3.select("#trail")
+          .style("visibility", "hidden");
+      d3.select("#percentage")
+          .style("visibility", "hidden");
+
+      // Deactivate all segments during transition.
+      d3.selectAll("path").on("mouseover", null);
+
+      // Transition each segment to full opacity and then reactivate it.
+      d3.selectAll("path")
+          .transition()
+          .duration(1000)
+          .style("opacity", 1)
+          .each("end", function() {
+                  d3.select(this).on("mouseover", mouseover);
+                });
+
+      d3.select("#explanation")
+          .transition()
+          .duration(1000)
+          .style("visibility", "hidden");
+    }
+
+    //------------------------------------------------------
+    // Given a node in a partition layout, return an array of all of its ancestor
+    // nodes, highest first, but excluding the root.
+    function getAncestors(node) {
+      var path = [];
+      var current = node;
+      while (current.parent) {
+        path.unshift(current);
+        current = current.parent;
+      }
+      return path;
+    }
+
+    //------------------------------------------------------
+    function initializeBreadcrumbTrail() {
+        // Add the svg area.
+        var trail = d3.select("#sequence").append("svg:svg")
+           .attr("height", 50)
+           .attr("id", "trail");
+           // Add the label at the end, for the percentage.
+        trail.append("svg:text")
+           .attr("id", "endlabel");
+    }
+
+    //------------------------------------------------------
+    // Generate a string that describes the points of a breadcrumb polygon.
+    function breadcrumbPoints(d, i) {
+
+        var points = [];
+        points.push("0,0");
+        points.push(b.w + ",0");
+        points.push(b.w + b.t + "," + (b.h / 2));
+        points.push(b.w + "," + b.h);
+        points.push("0," + b.h);
+        if (i > 0) { // Leftmost breadcrumb; don't include 6th vertex.
+           points.push(b.t + "," + (b.h / 2));
+           }
+        return points.join(" ");
+    }
+
+    //------------------------------------------------------
+    // Update the breadcrumb trail to show the current sequence and percentage.
+    function updateBreadcrumbs(nodeArray, percentageString) {
+
+      // Data join; key function combines name and depth (= position in sequence).
+        var g = d3.select("#trail")
+           .selectAll("g")
+           .data(nodeArray, function(d) { return d.name + d.depth; });
+
+        // Add breadcrumb and label for entering nodes.
+        var entering = g.enter().append("svg:g");
+
+        entering.append("svg:polygon")
+           .attr("points", breadcrumbPoints)
+           .style("fill", function(d) { return colors[d.name]; });
+
+        entering.append("svg:text")
+           .attr("x", (b.w + b.t) / 2)
+           .attr("y", b.h / 2)
+           .attr("dy", "0.35em")
+           .attr("text-anchor", "middle")
+           .attr('font-size', '12px')
+           .text(function(d) {return multicircleDefinitions[d.name].legend;});
+           //.text(function(d) {return d.name;});
+
+        // Set position for entering and updating nodes.
+        g.attr("transform", function(d, i) {
+        return "translate(" + i * (b.w + b.s) + ", 0)";
+        });
+
+        // Remove exiting nodes.
+        g.exit().remove();
+
+        // Now move and update the percentage at the end.
+        d3.select("#trail").select("#endlabel")
+           .attr("x",0)
+           .attr("y",45)
+           .attr("dy", "0.25em")
+           .attr("text-anchor", "left")
+           .text(percentageString);
+
+        // Make the breadcrumb trail visible, if it's hidden.
+        d3.select("#trail").style("visibility", "");
+    }
+
+    //------------------------------------------------------
+    function drawLegend() {
+        var legend1 = d3.select("#legend-"+Idcontainer).append("svg:svg")
+            .data(["64"])
+            .enter()
+            .append("rect")
+            .attr("x", 30)
+            .attr("y", function(d, i){return 20+i *  40;})
+            .attr("rx", 4)
+            .attr("ry", 4)
+            .attr("width",30)
+            .attr("height", 25)
+            .style("fill", function(d,i) {return multicircleDefinitions[d].color;});
+
+        legend1.selectAll('text')
+            .data(["64"])
+            .enter()
+            .append("text")
+            .attr("x", 80)
+            .attr("y", function(d, i){var y= 20+i*40; return  40 +i*40;})
+            .text(function(d,i) {return multicircleDefinitions[d].legend;})
+            .style('fill','#333')
+            .style('font-family', 'Arial')
+            .style('font-size', '14px');
+    }
+
+    //------------------------------------------------------
+    function toggleLegend() {
+        var legend = d3.select("#legend");
+        if (legend.style("visibility") == "hidden") {legend.style("visibility", "")} else {legend.style("visibility", "hidden");}
+    }
+
+    // -----------------------------------------------------------------
+    // Take a 2-column CSV and transform it into a hierarchical structure suitable
+    // for a partition layout. The first column is a sequence of step names, from
+    // root to leaf, separated by hyphens. The second column is a count of how
+    // often that sequence occurred.
+    function buildHierarchy(csv) {
+        var root = {"name": "root", "children": []};
+
+        for (var i = 0; i < csv.length; i++) {
+            var sequence = csv[i][0];
+            var size = +csv[i][1];
+            if (isNaN(size)) { // e.g. if this is a header row
+               continue;
+            }
+
+            var parts = sequence.split("_");
+            var currentNode = root;
+            for (var j = 0; j < parts.length; j++) {
+                var children = currentNode["children"];
+                var nodeName = parts[j];
+                var childNode;
+
+                if (j + 1 < parts.length) {
+                    // Not yet at the end of the sequence; move down the tree.
+                    var foundChild = false;
+
+                    for (var k = 0; k < children.length; k++) {
+                        if (children[k]["name"] == nodeName) {
+                            childNode = children[k];
+                            foundChild = true;
+                            break;
+                        }
+                    }
+
+                    // If we don't already have a child node for this branch, create it.
+                    if (!foundChild) {
+                        childNode = {"name": nodeName, "children": []};
+                        children.push(childNode);
+                    }
+
+                    currentNode = childNode;
+
+                } else {
+                    // Reached the end of the sequence; create a leaf node.
+                    childNode = {"name": nodeName, "size": size};
+                    children.push(childNode);
+                }
+            }
+        }
+
+        return root;
+    };
+}

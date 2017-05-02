@@ -1,0 +1,90 @@
+# French translation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NOM DU MODULE (VERSION)\n"
+"POT-Creation-Date: 2014-05-26 11:10+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Language-Team: French\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+msgid "Edit profile"
+msgstr "Modifier mon profil"
+
+msgid "Cookies help us deliver our services. By using our services, you agree to our use of cookies."
+msgstr "En navigant sur ce site vous acceptez l’utilisation de cookies permettant de vous offrir une expérience positive de notre site :<br /> partager vos contenus favoris avec vos amis, établir des statistiques de fréquentation, conserver vos préférences de navigation."
+
+msgid "Load more"
+msgstr "Voir plus"
+
+msgid "Legal information"
+msgstr "Informations légales"
+
+msgid "End"
+msgstr "Fin"
+
+msgid "Login"
+msgstr "Connexion"
+
+msgid "My profile"
+msgstr "Mon profil"
+
+msgid "Close"
+msgstr "Fermer"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "See more"
+msgstr "En lire plus"
+
+msgid "Last news"
+msgstr "Dernières actualités"
+
+msgid "Confirm password"
+msgstr "Confirmation mot de passe"
+
+msgid "Unpublished"
+msgstr "Non publié"
+
+msgid "Jump to navigation"
+msgstr "Aller à la navigation"
+
+msgid "Drop a resource from Scald media library here."
+msgstr "Déposez une ressource à partir de la librairie de média."
+
+msgid "Switch to plain text editor"
+msgstr "Éditeur en mode texte"
+
+msgid "Switch to rich text editor"
+msgstr "Éditeur en mode WYSIWYG"
+
+msgid "Leave this field blank"
+msgstr "Laissez ce champ vide"
+
+msgid "Edit atom properties"
+msgstr "&Eacute;diter les propriétés du média"
+
+msgid "Cut"
+msgstr "Couper"
+
+msgid "Atoms"
+msgstr "Bibliothèque de média"
+
+msgid "Replacement login information for [user:name] at [site:name]"
+msgstr "Renouvellement de mot de passe pour [user:name] sur [site:name]"
+
+msgid "Forget password?"
+msgstr "Mot de passe oublié ?"
+
+msgid "Quote"
+msgstr "Citation"
+
+msgid "Edit my account"
+msgstr "Éditer mon compte"
+
+msgid "You have just used your one-time login link. Your account is now active and you are authenticated."
+msgstr "Vous venez d'utiliser votre unique lien de connexion. Votre compte est maintenant actif et vous êtes authentifié."

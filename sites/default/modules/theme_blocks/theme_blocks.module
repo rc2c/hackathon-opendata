@@ -1,0 +1,428 @@
+<?php
+
+/**
+ * Emplacement des blocks dans les régions
+ */
+function theme_blocks_page_alter(&$page)
+{
+    $page['header'][] = theme_blocks_get('system', 'main-menu');
+    $page['header'][] = theme_blocks_get('theme_blocks', 'user_manager');
+
+    $page['navigation'][] = theme_blocks_get('theme_blocks', 'thematique_list');
+
+    // HOME
+    if (DrupTools::isSlug('<front>')) {
+        $page['content_views'][] = theme_blocks_get('views', 'thematique-user_favorites');
+        $page['content_views'][] = theme_blocks_get('views', 'thematique-realtime');
+        $page['content_views'][] = theme_blocks_get('views', 'thematique-last_graphic');
+        $page['content_views'][] = theme_blocks_get('views', 'thematique-last_map');
+    }
+
+    // NOT FRONT
+    else if (!DrupTools::isSlug('admin/*') && !DrupTools::isSlug('*edit*') && !DrupTools::isSlug('*add*')) {
+        
+        if (isset($page['#node'])) {
+            $routeName = DrupRouter::getRouteName();
+
+            switch ($routeName) {
+                case 'list_all':
+                    $page['content_views'][] = theme_blocks_get('views', 'thematique-list_all');
+                break;
+            }
+
+            switch ($page['#node']->type) {
+                case 'data':
+                    $page['sidebar_first'][] = theme_blocks_get('theme_blocks', 'node_infos');
+                    $page['content_views'][] = theme_blocks_get('views', 'thematique-list_matching');
+                break;
+            }
+        }
+
+        if (DrupTools::isTermView()) {
+            $page['content_views'][] = theme_blocks_get('views', 'thematique-list');
+        }
+    }
+
+    if (DrupTools::isSlug('users/*')) {
+        $page['content_views'][] = theme_blocks_get('views', 'thematique-list_user');
+    }
+
+    $page['footer'][] = theme_blocks_get('menu', 'menu-footer');
+}
+
+/**
+ * Déclarer un block
+ *
+ * @example https://api.drupal.org/api/drupal/modules!block!block.api.php/function/hook_block_info/7
+ * @return  array
+ */
+function theme_blocks_block_info()
+{
+    $blocks = array();
+
+    $blocks['thematique_list'] = array(
+        'info'  => 'Liste des thématiques',
+        'admin' => false
+    );
+    $blocks['user_manager'] = array(
+        'info'  => 'Informations sur l\'utilisateur',
+        'admin' => false
+    );
+    $blocks['node_infos'] = array(
+        'info'  => 'Informations complémentaires sur le noeud courant',
+        'admin' => false
+    );
+
+    return $blocks;
+}
+
+/**
+ * Déclarer un template
+ * @return array
+ */
+function theme_blocks_theme()
+{
+    return array(
+        'thematique_list' => array(
+            'path'      => (defined('PATH_TO_BLOCKS')) ? PATH_TO_BLOCKS : null,
+            'variables' => array(),
+        ),
+        'user_manager' => array(
+            'path'      => (defined('PATH_TO_BLOCKS')) ? PATH_TO_BLOCKS : null,
+            'variables' => array(),
+        ),
+        'node_infos' => array(
+            'path'      => (defined('PATH_TO_BLOCKS')) ? PATH_TO_BLOCKS : null,
+            'variables' => array(),
+        )
+    );
+}
+
+/**
+ * Contenu du bloc
+ */
+function theme_blocks_block_view($delta = '')
+{
+    $block = array();
+
+    switch ($delta) {
+        // case 'push':
+        //     $data      = variable_get('block_push_front', array());
+        //     $vars = array(
+        //         'title'       => (isset($data['title'])) ? $data['title'] : '',
+        //         'body'        => (isset($data['body'])) ? $data['body'] : '',
+        //         'pathToTheme' => path_to_theme()
+        //     );
+
+        //     $block['content'] = theme($delta, $vars);
+        //     break;
+
+        case 'thematique_list':
+
+            $terms = array();
+            $vocabulary = new StdClass;
+
+            if ($vocabulary = taxonomy_vocabulary_machine_name_load('thematique')) {
+                //$terms = entity_load('taxonomy_term', FALSE, array('vid' => $vocabulary->vid));
+                $terms = taxonomy_get_tree($vocabulary->vid, $parent = 0, $max_depth = null, $load_entities = true);
+            }
+            
+            $block['content'] = theme_render_template(
+                path_to_theme().'/templates/partials/menu-taxonomy.tpl.php', 
+                array(
+                    'vocabulary' => $vocabulary,
+                    'terms' => $terms
+                )
+            );
+            break;
+
+        case 'node_infos':
+            $vars = array();
+            $block['content'] = theme($delta, $vars);
+            break;
+
+        default:
+            $block['content'] = theme($delta);
+            break;
+    }
+
+    return $block;
+}
+
+/**
+ * Form admin
+ *
+ * @param  string $delta -> Delta du bloc
+ * @return array         -> Formulaire à afficher pour le delta du block
+ */
+function theme_blocks_block_configure($delta = '')
+{
+    $form = array();
+
+    switch ($delta) {
+        // case 'push':
+        //     $destination = (isset($_GET['destination'])) ? $_GET['destination'] : null;
+
+        //     if ($destination !== null) {
+        //         $nid = DrupTools::parseNodeUrl($destination);
+
+        //         if ($nid === null && $destination === 'node') {
+        //             $nid = 'front';
+        //         }
+
+        //         $data      = variable_get('block_push_' . $nid, array());
+        //         $linkType  = (isset($data['link']['type'])) ? $data['link']['type'] : 'internal';
+        //         $linkTitle = (isset($data['link']['title'])) ? $data['link']['title'] : '';
+        //         $linkUrl   = (isset($data['link']['url'])) ? $data['link']['url'] : '';
+        //         if ($linkType == 'internal' && is_array($linkUrl)) {
+        //             $linkUrlEntity = current($linkUrl);
+        //             $linkUrl = $linkUrlEntity['entity_label'] . ' (' . $linkUrlEntity['entity_id'] . ')';
+        //         }
+
+        //         $form['block_push_nid'] = array(
+        //             '#type'          => 'hidden',
+        //             '#default_value' => $nid
+        //         );
+        //         $form['block_push_title'] = array(
+        //             '#type'          => 'textfield',
+        //             '#title'         => t('Content title'),
+        //             '#default_value' => (isset($data['title'])) ? $data['title'] : ''
+        //         );
+        //         $form['block_push_media'] = array(
+        //             '#type'          => 'textfield',
+        //             '#title'         => t('Media'),
+        //             '#default_value' => (isset($data['media'])) ? $data['media'] : '',
+        //             '#attached'      => array(
+        //                 'library' => array(
+        //                     array('dnd', 'library'),
+        //                     array('atom_reference', 'library'),
+        //                 ),
+        //             ),
+        //             '#attributes' => array(
+        //                 'data-types'       => 'image,video',
+        //                 'data-dnd-context' => 'sdl_editor_representation',
+        //             ),
+        //             '#preview_context' => 'sdl_editor_representation',
+        //             '#process'         => array('atom_reference_field_widget_form_process'),
+        //         );
+        //         $form['block_push_body'] = array(
+        //             '#type'          => 'textarea',
+        //             '#title'         => t('Description'),
+        //             '#default_value' => (isset($data['body'])) ? $data['body'] : ''
+        //         );
+        //         $form['block_push_link_type'] = array(
+        //             '#type'          => 'radios',
+        //             '#title'         => t('Link type'),
+        //             '#options'       => array('internal' => t('Internal'), 'external' => t('External')),
+        //             '#default_value' => $linkType
+        //         );
+        //         $form['block_push_link_internal'] = array(
+        //             '#type'  => 'fieldset',
+        //             '#title' => t('Link internal')
+        //         );
+        //         $form['block_push_link_internal']['block_push_link_internal_title'] = array(
+        //             '#type'          => 'textfield',
+        //             '#title'         => t('Title'),
+        //             '#default_value' => ($linkType == 'internal') ? $linkTitle : ''
+        //         );
+        //         $form['block_push_link_internal']['block_push_link_internal_link'] = array(
+        //             '#type'            => 'entityreference',
+        //             '#title'           => t('Link'),
+        //             '#era_entity_type' => 'node',
+        //             '#era_bundles'     => array(
+        //             'page',
+        //             'webform',
+        //             'news'
+        //             ),
+        //             '#era_cardinality' => -1,
+        //             '#default_value'   => ($linkType == 'internal') ? $linkUrl : ''
+        //         );
+        //         $form['block_push_link_external'] = array(
+        //             '#type'  => 'fieldset',
+        //             '#title' => t('Link external')
+        //         );
+        //         $form['block_push_link_external']['block_push_link_external_title'] = array(
+        //             '#type'          => 'textfield',
+        //             '#title'         => t('Title'),
+        //             '#default_value' => ($linkType == 'external') ? $linkTitle : ''
+        //         );
+        //         $form['block_push_link_external']['block_push_link_external_link'] = array(
+        //             '#type'          => 'urlfield',
+        //             '#title'         => t('Link'),
+        //             '#description'   => t('Complete link with http://'),
+        //             '#default_value' => ($linkType == 'external') ? $linkUrl : ''
+        //         );
+        //     } else {
+        //         $form['block_push_no_config'] = array(
+        //             '#markup' => '<p class="no-configuration">' . t('Impossible to configure this block') . '</p>'
+        //         );
+        //     }
+        //     break;
+    }
+
+    return $form;
+}
+
+/**
+ * Submit form admin
+ *
+ * @param  string $delta -> Delta du bloc
+ * @param  array  $edit  -> Resultat de l'édition
+ */
+function theme_blocks_block_save($delta = '', $edit = array())
+{
+    switch ($delta) {
+        // case 'push':
+        //     $nid       = $edit['block_push_nid'];
+        //     $linkTitle = ($edit['block_push_link_type'] == 'internal') ? $edit['block_push_link_internal_title'] : $edit['block_push_link_external_title'];
+        //     $linkUrl   = ($edit['block_push_link_type'] == 'internal') ? $edit['block_push_link_internal_link'] : $edit['block_push_link_external_link'];
+
+        //     $data = array(
+        //         'media'       => $edit['block_push_media'],
+        //         'title'       => $edit['block_push_title'],
+        //         'body'        => $edit['block_push_body'],
+        //         'link'        => array(
+        //             'type'  => $edit['block_push_link_type'],
+        //             'title' => $linkTitle,
+        //             'url'   => $linkUrl
+        //         )
+        //     );
+        //     variable_set('block_push_' . $nid, $data);
+        //     break;
+    }}
+
+/**
+ * Init module
+ */
+function theme_blocks_init()
+{
+    define('PATH_TO_TEMPLATES', drupal_get_path('theme', variable_get('theme_default', null)) . '/templates');
+    define('PATH_TO_BLOCKS', PATH_TO_TEMPLATES . '/blocks');
+    define('PATH_TO_VIEWS', PATH_TO_TEMPLATES . '/views');
+}
+
+function theme_blocks_page_build(&$page)
+{
+    if ($node = menu_get_object()) {
+        $page['#node'] = $node;
+    }
+}
+
+/**
+ * Render block
+ */
+function theme_blocks_get($module, $delta)
+{
+    $block = block_load($module, $delta);
+    if (isset($block->bid)) {
+        $blockContent = _block_render_blocks(array($block));
+
+        if (!empty($blockContent)) {
+            return _block_get_renderable_array($blockContent);
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Preprocess block menus
+ */
+function theme_blocks_preprocess_block(&$vars)
+{
+    // Gestion des liens contextuels en admin
+    if (isset($vars['logged_in']) && $vars['logged_in'] === true) {
+        // Classes à supp
+        $deleteClasses = array(
+            'block',
+            'block-menu',
+            'block-search',
+        );
+        $i = 0;
+        foreach ($vars['classes_array'] as $className) {
+            if (in_array($className, $deleteClasses)) {
+                unset($vars['classes_array'][$i]);
+            }
+            $i++;
+        }
+
+        $blocks = theme_blocks_block_info();
+        if (isset($blocks[$vars['block']->delta]['admin'])) {
+            if ($blocks[$vars['block']->delta]['admin'] === true) {
+                $vars['classes_array'][] = 'block-admin';
+            } elseif ($blocks[$vars['block']->delta]['admin'] === false) {
+                $vars['classes_array'][] = 'block-no-admin';
+            }
+        }
+    }
+
+    // Menu principal
+    if ($vars['block']->delta === 'main-menu') {
+        $vars['block_menu']                   = true;
+        $vars['block_html_id']                = 'nav--main';
+        $vars['attributes_array']['tabindex'] = '-1';
+        $vars['classes_array'] = array(
+            'nav',
+            'nav--main'
+        );
+        $vars['attributes_array']['class']    = array(
+            'nav',
+            'nav--main'
+        );
+        $vars['content'] = theme('links__system_main_menu', array(
+            'links'   => menu_tree_all_data('main-menu', null, 3),
+            'heading' => array(
+                'text'  => t('Main menu'),
+                'level' => 'h2',
+                'class' => array('element-invisible'),
+                'menu_id' => $vars['block_html_id']
+            ),
+        ));
+    }
+    // Menu secondaire
+    elseif ($vars['block']->delta === 'menu-menu-secondaire') {
+        if (theme_get_setting('toggle_secondary_menu')) {
+            $vars['block_menu']                = true;
+            $vars['block_html_id']             = 'nav--secondary';
+            $vars['classes_array'] = array(
+                'nav',
+                'nav--secondary'
+            );
+            $vars['attributes_array']['class'] = array(
+                'nav',
+                'nav--secondary'
+            );
+            $vars['content'] = theme('links', array(
+                'links' => menu_secondary_menu(),
+                'heading' => array(
+                    'text' => t('Secondary menu'),
+                    'level' => 'h2',
+                    'class' => array('element-invisible'),
+                    'menu_id' => $vars['block_html_id']
+                ),
+            ));
+        }
+    }
+    // Menu footer
+    elseif ($vars['block']->delta === 'menu-footer') {
+        $vars['block_menu']                = true;
+        $vars['block_html_id']             = 'nav--footer';
+        $vars['classes_array'] = array(
+            'nav',
+            'nav--footer'
+        );
+        $vars['attributes_array']['class'] = array(
+            'nav',
+            'nav--footer'
+        );
+        $vars['content'] = theme('links__system_main_menu', array(
+            'links'   => menu_tree_all_data('menu-footer', null, 2),
+            'heading' => array(
+                'text'  => t('Menu footer'),
+                'level' => 'h2',
+                'class' => array('element-invisible'),
+                'menu_id' => $vars['block_html_id']
+            ),
+        ));
+    }
+}

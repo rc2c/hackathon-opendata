@@ -1,0 +1,24 @@
+name = Drup'
+description = Ajout de méthode pour le core de Drupal
+#package = RC2C
+author = RC2C
+version = 7.x-1.0
+core = 7.x
+
+files[] = router/router.class.inc
+files[] = includes/drup_conf.class.inc
+files[] = includes/drup_tools.class.inc
+files[] = includes/drup_entity.class.inc
+files[] = includes/drup_node.class.inc
+files[] = includes/drup_user.class.inc
+files[] = includes/drup_term.class.inc
+files[] = includes/drup_media.class.inc
+files[] = includes/drup_media_base_entity.class.inc
+files[] = includes/drup_image.class.inc
+files[] = includes/drup_file.class.inc
+files[] = includes/drup_video_external.class.inc
+files[] = includes/drup_calameo.class.inc
+files[] = includes/drup_db.class.inc
+
+dependencies[] = scald
+dependencies[] = field

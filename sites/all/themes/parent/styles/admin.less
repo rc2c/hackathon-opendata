@@ -1,0 +1,454 @@
+#skip-link {
+    margin: 0;
+}
+
+/* ==========================================================================
+    ACTIONS LINLKS
+   ========================================================================== */
+.action-links {
+    margin-bottom: @v-align / 2;
+
+    li {
+        display: inline-block;
+        vertical-align: middle;
+
+        & + li {
+            margin-left: @grid-gutter / 2;
+        }
+    }
+}
+
+
+.form-submit + #edit-cancel {
+    margin-left: @grid-gutter / 2;
+}
+
+
+/* ==========================================================================
+    TABS PRIMARY + SECONDARY
+   ========================================================================== */
+.tabs--primary,
+.tabs--secondary {
+    margin-bottom: @v-align/2;
+    overflow: hidden;
+    .font-size(14);
+
+    li {
+        float: left;
+
+        a {
+            display: block;
+            padding: 10px 24px;
+            color: @tabs-primary-color;
+            background-color: @tabs-primary-background;
+
+            &.active {
+                color: @tabs-primary-color-active;
+            }
+            &:hover {
+                color: @tabs-primary-color-active;
+            }
+        }
+    }
+}
+.tabs--primary {
+    border-bottom: 1px solid @tabs-primary-bordercolor;
+
+    li {
+        margin-bottom: -1px;
+
+        a {
+            border: 1px solid @tabs-primary-bordercolor;
+
+            &.active {
+                background-color: darken(@tabs-primary-background, 6%);
+            }
+        }
+
+        & + li {
+            a {
+                border-left: none;
+            }
+        }
+    }
+}
+.tabs--secondary {
+    float: right;
+    margin-top: -@v-align / 2;
+    border-top: none;
+}
+
+
+/* ==========================================================================
+   VERTICAL TABS
+   ========================================================================== */
+div.vertical-tabs {
+    margin-top: @v-align;
+
+    ul.vertical-tabs-list li {
+        border-color: @color-border;
+
+        a {
+           color: inherit;
+        }
+    }
+    .vertical-tabs-panes {
+        padding: @grid-gutter / 2;
+    }
+}
+
+
+
+/* ==========================================================================
+   HORIZONTAL TABS
+   ========================================================================== */
+div.horizontal-tabs { 
+    border-color: @color-border;
+
+    fieldset.horizontal-tabs-pane {
+        padding: 15px 30px 0;
+    }
+
+    ul.horizontal-tabs-list {
+        background-color: @color-background-muted;
+        border-color: @color-border;
+        border-bottom: 1px solid @color-border;
+
+        li {
+            padding: 0;
+
+            a {
+                padding: @btn-padding-vertical @btn-padding-horizontal;
+                color: @color-text;
+
+                &:hover {
+                    background-color: @color-background;
+                }
+            }
+            &.selected {
+                padding: 0;
+                
+                a {
+                    padding: @btn-padding-vertical @btn-padding-horizontal;
+                    background-color: @color-background;
+
+                    strong {
+                        color: @color-primary;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+/* ==========================================================================
+   CONFIGURATION PAGE
+   ========================================================================== */
+div.admin {
+    .left {
+        width: 49%;
+        margin-left: 0;
+    }
+    .right {
+        width: 49%;
+        margin-right: 0;
+    }
+}
+div.admin-panel {
+    margin-bottom: @grid-gutter;
+    padding: @grid-gutter @grid-gutter 0;
+    background-color: @color-background-muted;
+}
+
+
+/* ==========================================================================
+   TABLE
+   ========================================================================== */
+table {
+    td.block {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .form-item {
+        margin: 0;
+    }
+}
+table.sticky-header {
+    z-index: 100;
+}
+
+/* ==========================================================================
+   NODE 
+   ========================================================================== */
+.cke_contents {
+    padding: @grid-gutter / 2 !important;
+}
+
+.cke_reset_all {
+    input,
+    textarea {
+        line-height: inherit !important;
+        min-height: 0 !important;
+    }
+}
+
+.form-type-textarea {
+    & + .ckeditor_links {
+        &,
+        & + .form-wrapper {
+            display: none !important;
+        }
+    }
+}
+
+.field-type-datetime {
+    .form-wrapper {
+        padding: 0;
+        border: none;
+    }
+    legend {
+        display: none;
+    }
+    fieldset.date-combo .container-inline-date .date-padding {
+        padding: 0;
+    }
+}
+
+
+.atom_reference_drop_zone {
+    padding: @grid-gutter;
+}
+form .ctools-link {
+    display: none;
+}
+
+
+#block-admin-configure {
+    .form-item-title,
+    #edit-regions,
+    #edit-visibility-title,
+    .vertical-tabs {
+        display: none;
+    }
+}
+
+
+/* ==========================================================================
+   FEATURES
+   ========================================================================== */
+.features-export-form {
+    overflow: hidden;
+}
+#features-export-advanced fieldset legend {
+    display: none;
+}
+#features-export-advanced .form-item-project-status-url,
+#features-autodetect,
+#features-export-advanced .form-item-features-allow-conflicts,
+#features-export-advanced #edit-info-preview,
+#features-export-buttons,
+.features-export-parent.component-menu_links {
+    display: none;
+}
+
+
+/* ==========================================================================
+   VIEWS
+   ========================================================================== */
+.scroll.form-wrapper {
+    margin-bottom: 0;
+}
+
+
+
+/* ==========================================================================
+   SPINNER
+   ========================================================================== */
+.spinner-container {
+    &.spinner-type-overlay {
+        position: relative;
+    }
+}
+.spinner-wrapper {
+    opacity: 0;
+    z-index: -1;
+
+    .spinner-loading &,
+    .customScald-spinner-loading & {
+        opacity: 1;
+        z-index: 1002;
+    }
+}
+.spinner-type-overlay {
+    .spinner-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .2);
+        transition: .3s;
+    }
+    .spinner-wrapperInner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 5;
+        padding: 15px;
+        margin: -30px;
+        width: 44px;
+        height: 44px;
+        background: no-repeat center @color-primary;
+        border-radius: 50%;
+
+        .spinner-loading&,
+        .customScald-spinner-loading& {
+            background-image: url("../images/spinner.svg");
+        }
+    }
+}
+.ajax-progress {
+    display: none !important;
+}
+
+
+
+/* ==========================================================================
+   REPEATER FIELDS
+   ========================================================================== */
+form .field-multiple-table th.field-label {
+    padding: @btn-padding-vertical @btn-padding-horizontal;
+    border-bottom: 1px solid @color-border;
+    background-color: @color-background-muted;
+    color: @color-text;
+
+    label {
+        margin: 0;
+    }
+}
+
+
+
+/* ==========================================================================
+   DATEPICKER
+   ========================================================================== */
+#ui-datepicker-div {
+   border: 1px solid @color-border;
+   background: @color-background-muted;
+}
+.ui-widget-header {
+   background: transparent;
+   border: transparent;
+
+   select {
+      height: auto;
+      line-height: normal;
+   }
+}
+.ui-datepicker th {
+   padding: .3em;
+}
+.ui-state-default, 
+.ui-widget-content .ui-state-default, 
+.ui-widget-header .ui-state-default {
+   border: 1px solid @color-border;
+   background: transparent;
+}
+.ui-datepicker td span, 
+.ui-datepicker td a {
+   text-align: center;
+
+   &:hover {
+      background-color: @color-primary;
+      color: #fff;
+   }
+}
+
+
+
+
+/* ==========================================================================
+   USER FIELDS
+   ========================================================================== */
+#user-profile-form {
+    #edit-timezone,
+    #edit-mimemail,
+    #edit-ckeditor,
+    #edit-metatags {
+        display: none;
+    }
+}
+
+
+/* ==========================================================================
+   SCALD MANAGE
+   ========================================================================== */
+#scald-atom-add-form-add {
+    .wizard-trail {
+        display: none;
+    }
+}
+.content #scald-atom-add-form-options,
+.content #scald-atom-add-form-options--2 {
+    .wizard-trail,
+    .description,
+    div[class*="-scald-actions"],
+    .field-name-field-scald-type,
+    .field-name-field-scald-url,
+    .field-name-field-scald-iframe-src,
+    .form-managed-file .form-submit {
+        display: none;
+    }
+
+    .form-wrapper,
+    .form-item {
+        margin-bottom: 15px;
+    }
+    .form-item {
+        overflow: hidden;
+        clear: both;
+
+        label {
+            float: left;
+            width: 25%;
+
+            & + [class*="form-"] {
+                float: left;
+                width: 75%;
+            }
+        }
+    }
+    .field-type-url {
+        .form-wrapper {
+            padding: 0;
+            border: none;
+
+            & > legend {
+                display: none;
+            }
+        }
+    }
+    .field-type-datetime {
+        legend {
+            display: block;
+            float: left;
+            width: 25%;
+            padding: 0;
+            margin: 0;
+            font-size: inherit;
+
+            & + .fieldset-wrapper {
+                float: left;
+                width: 75%;
+
+                label {
+                    display: none;
+                }
+                .form-item {
+                    margin: 0;
+                }
+            }
+        }
+    }
+}

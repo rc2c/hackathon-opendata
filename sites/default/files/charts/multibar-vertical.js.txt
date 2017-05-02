@@ -1,0 +1,106 @@
+/**
+ * Config
+ */
+var toPlot = {};
+var jsonfile = "/sites/default/files/charts/tscompte.json";
+var Idcontainer = "1";
+var height = 400;
+var DefVar = {
+    'Naiss_Fem'  :{color:'#87aade', legend:'Naiss. féminines'},
+    'Deces_Fem'  :{color:'#214478', legend:'Déces féminins'},
+    'Naiss_Masc' : {color:'#e9afdd', legend:'Naiss. masculines'},
+    'Deces_Masc' :{color:'#a02c86', legend:'Déces Masculin'},
+};
+var arrond = d3.format(".1r");
+var unit = 'nb';
+var vers = 'icons';
+var chartContainerId = $('#%chartContainerId%');
+chartContainerId.height(height);
+
+/**
+ * Formulaire
+ */
+var chartForm = '<form>' +
+    '<p>Choix du type de représentation :</p>' +
+    '<div class="btn-group mr-1" data-toggle="buttons" aria-label="First group">' +
+        '<label class="btn btn-outline-secondary" for="chart-form-item-groupe">' +
+            '<input class="form-radio" type="radio" id="chart-form-item-groupe" name="chart-form-item" value="groupe" /> groupé' +
+        '</label>' +
+        '<label class="btn btn-outline-secondary active" for="chart-form-item-cumule">' +
+            '<input class="form-radio" type="radio" id="chart-form-item-cumule" name="chart-form-item" value="cumule" checked /> cumulé' +
+        '</label>' +
+    '</div>' +
+'</form>';
+
+$('#%chartFormId%').html(chartForm);
+
+
+/**
+ * Init
+ */
+PlotOneMultiBar(jsonfile, "tscompte");
+$('#%chartFormId%').find('.form-radio').on('change', function() {
+    PlotOneMultiBar(jsonfile, "tscompte");
+});
+
+function PlotOneMultiBar(jsonfile,iSelect) {
+
+    d3.json(jsonfile, function(error, dataset) {
+        chartContainerId.empty();
+        toPlot[Idcontainer] = dataset[iSelect];
+
+        var NbSect = toPlot[Idcontainer][0].values.length;
+        var TotSect = {};
+        var isect;
+        for (isect = 0; isect < NbSect; isect++) {
+           var id = toPlot[Idcontainer][0].values[isect].x;
+           TotSect[id] = d3.sum(toPlot[Idcontainer], function(d) { return +d.values[isect].y;} );
+        }
+
+        var i;
+        for (i = 0; i < toPlot[Idcontainer].length; i++) {
+           toPlot[Idcontainer][i].values.forEach(function(d) { d.color = DefVar[toPlot[Idcontainer][i].id].color})
+           toPlot[Idcontainer][i].key = DefVar[toPlot[Idcontainer][i].id].legend;
+           toPlot[Idcontainer][i].color = DefVar[toPlot[Idcontainer][i].id].color;
+        }
+
+        // Getsion du type de représentation
+        var type;
+        var selectedValue = $('#%chartFormId%').find('.form-radio:checked').val();
+        if (selectedValue == "groupe") {
+            type = false;
+        }
+        if (selectedValue == "cumule") {
+            type = true;
+        }
+        if (selectedValue == "etendu") {
+            for (i = 0; i < toPlot[Idcontainer].length; i++) {
+                type = true;
+                toPlot[Idcontainer][i].values.forEach(function(d) { d.y =  100*d.y/TotSect[d.x]});
+                unit = "%";
+            }
+        }
+
+        nv.addGraph(function() {
+          var chart = nv.models.multiBarChart()
+              .color(function(d) {return DefVar[d.id].color })
+              .showControls(false)
+              .margin({left: 100})
+              .stacked(type)
+              .wrapLabels(true)
+           .reduceXTicks(false)
+           .staggerLabels(true)
+           .options({showXAxis: true,showYAxis: true,transitionDuration: 250 })
+           .height(height);
+
+        chart.xAxis.axisLabel("Année");
+        chart.yAxis.axisLabel("Nombre de Naissances/Déces");
+
+        d3.select('#%chartContainerId%').append('svg')
+           .datum(toPlot[Idcontainer])
+           .call(chart);
+
+        nv.utils.windowResize(chart.update);
+        });
+    });
+}

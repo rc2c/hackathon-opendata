@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Modèle de représentation feature.
+ */
+
+include_once 'dataviz.features.inc';

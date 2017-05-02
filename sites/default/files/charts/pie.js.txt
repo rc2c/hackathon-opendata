@@ -1,0 +1,73 @@
+var chartHeight = 500;
+$('#%chartContainerId%').height(chartHeight)
+
+SimplePieD3();
+
+function SimplePieD3()
+{
+    var data = JSON.parse('%jsonData%');
+    data = data[0];
+    var recette = data.filter(function(d) {
+        if (d.bud_dep_rec === 'Recette') {
+            return d;
+        }
+    });
+
+    var nested_recette = d3.nest()
+        .key(function(d) { return d.bud_section; })
+        .rollup(function(v) {
+            return {
+                count: v.length,
+                total: d3.sum(v, function(g) { return g.bud_montant; })
+            };
+        })
+        .entries(recette);
+
+    var depense = data.filter(function(d) {
+        if (d.bud_dep_rec === 'Dépense') {
+            return d;
+        }
+    });
+    var nested_depense = d3.nest()
+        .key(function(d) { return d.bud_section; })
+        .rollup(function(v) {
+            return {
+                count: v.length,
+                total: d3.sum(v, function(g) { return g.bud_montant; })
+            };
+        })
+        .entries(depense);
+
+    var result = [
+        {id: "Recette (Fonctionnement)", value: nested_recette[0].values.total},
+        {id: "Recette (Investissement)", value: nested_recette[1].values.total},
+        {id: "Dépense (Fonctionnement)", value: nested_depense[0].values.total},
+        {id: "Dépense (Investissement)", value: nested_depense[1].values.total}
+    ];
+
+    nv.addGraph(function(d) {
+        var chart = nv.models.pieChart()
+            .x(function(d) { return  d.id; })
+            .y(function(d) { return d.value; })
+            .labelType("percent")
+            .showLabels(true)
+            .height(chartHeight)
+            .donut(true)
+            //.color(function(d) {return d.color })
+            .showLegend(true);
+
+        /*chart.tooltip.contentGenerator(function (d) {
+        arrond = d3.format(".0f");
+        var content = '<h3 style="text-align:center">'+ arrond(d.data.value) + ' : '+ textTooltip + '</p></h3>';
+        return content; })
+        */
+
+        chart.valueFormat(d3.format(',.0f'));
+
+        d3.select('#%chartContainerId% svg')
+            .datum(result)
+            .call(chart);
+
+        return chart;
+    }); // fin nv.addGraph
+}

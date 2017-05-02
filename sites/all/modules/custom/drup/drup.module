@@ -1,0 +1,6 @@
+<?php
+
+/**
+ * INCLUDES
+ */
+module_load_include('inc', 'drup', 'router/router.admin');

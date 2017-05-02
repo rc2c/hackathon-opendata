@@ -1,0 +1,353 @@
+/* ==========================================================================
+   GLOBAL
+   ========================================================================== */
+.cke_show_borders {
+    padding: 10px;
+    background: #fff;
+}
+div.krumo-root {
+    color: black;
+}
+html.js input.form-autocomplete,
+html.js input.throbbing {
+    background-image: url("../images/throbber.png");
+}
+
+/* ==========================================================================
+   MODULES
+   ========================================================================== */
+#module-filter-show-wrapper .form-item {
+    display: inline-block;
+}
+#system-modules {
+    padding-top: 25px;
+}
+#module-filter-tabs {
+    z-index: 500;
+}
+#module-filter-tabs li {
+    font-size: 1.3em;
+}
+#module-filter-tabs li a {
+    color: #737373;
+}
+#module-filter-tabs li a:hover {
+    background: #FFF;
+}
+#module-filter-modules .module-filter-inputs-wrapper label {
+    display: block;
+    float: left;
+    margin-top: 7px;
+    width: 12%;
+    text-align: left;
+}
+#module-filter-modules .module-filter-inputs-wrapper input[name="module_filter[name]"] {
+    width: 88%;
+}
+#module-filter-modules #module-filter-show-wrapper {
+    display: none;
+}
+#module-filter-modules table th:first-child {
+    padding-left: 10px;
+}
+#module-filter-modules td.name label {
+    font-size: 1em;
+}
+#module-filter-modules td.description {
+    position: relative;
+    padding-right: 120px;
+}
+#module-filter-modules .admin-operations {
+    position: absolute;
+    right: 10px;
+    top: 11px;
+}
+
+// Ctools
+.ctools-button-processed {
+    background: #FFF;
+    border-radius: 5px;
+}
+
+// Locale
+#locale-translation-filter-form .form-actions {
+    padding-top: 4px;
+}
+
+/* ==========================================================================
+   FEATURES
+   ========================================================================== */
+.features-export-form {
+    overflow: hidden;
+}
+#features-export-info fieldset {
+    border-bottom: 0;
+    border-radius: 5px 5px 0 0;
+}
+#features-export-advanced {
+    margin-top: -38px;
+}
+#features-export-advanced fieldset {
+    border-top: 0;
+    border-radius: 0 0 5px 5px;
+}
+#features-export-advanced fieldset legend {
+    display: none;
+}
+#features-export-advanced .form-item-project-status-url,
+#features-autodetect,
+#features-export-advanced .form-item-features-allow-conflicts,
+#features-export-advanced #edit-info-preview,
+#features-export-buttons,
+.features-export-parent.component-menu_links {
+    display: none;
+}
+#features-export-wrapper .form-checkbox {
+    margin: 2px 6px 0 0;
+}
+
+/* ==========================================================================
+   ADMIN : tableaux
+   ========================================================================== */
+.sticky-header {
+    z-index: 50;
+}
+.sticky-table {
+    width: 100%;
+}
+.sticky-table th a {
+    color: inherit;
+}
+.sticky-table td .item-list ul {
+    padding: 0;
+}
+.sticky-table td .item-list li {
+    list-style: none;
+}
+.sticky-table td a {
+    text-decoration: none;
+}
+.sticky-table td a:hover {
+    text-decoration: underline;
+}
+.sticky-table th .form-checkbox,
+.sticky-table td .form-checkbox {
+    margin: 0 0 0 7px;
+}
+.node-form .field-multiple-table .field-value {
+    margin-bottom: 10px;
+}
+.node-form .field-multiple-table .form-item {
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
+   ADMIN : content
+   ========================================================================== */
+#node-admin-content #edit-actions {
+    clear: both;
+}
+#node-admin-content #edit-options .form-item {
+    display: block;
+    float: left;
+    width: 85%;
+}
+#node-admin-content #edit-options .form-submit {
+    margin: 15px 0 0 18px;
+}
+
+#node-admin-content table .select-all .form-checkbox {
+    margin-left: 27px;
+}
+form .field-multiple-table th.field-label {
+    padding-left: 1em;
+}
+.admin-views-view .views-exposed-form .views-submit-button {
+    padding-right: 1em;
+}
+
+/* ==========================================================================
+   VERTICAL TABS
+   ========================================================================== */
+.vertical-tabs {
+    background: #fff;
+}
+.vertical-tabs ul.vertical-tabs-list li.selected a,
+.vertical-tabs ul.vertical-tabs-list li a:hover,
+.vertical-tabs ul.vertical-tabs-list li a:focus {
+    outline: none;
+    background: #fff;
+}
+.vertical-tabs ul.vertical-tabs-list li.selected a strong,
+.vertical-tabs ul.vertical-tabs-list li a:hover strong,
+.vertical-tabs ul.vertical-tabs-list li a:focus strong {
+    text-decoration: none;
+}
+.vertical-tabs-panes {
+    padding: 20px 10px;
+}
+
+/* ==========================================================================
+   NODE
+   ========================================================================== */
+.node-form .form-item,
+.node-form .form-wrapper {
+    margin-bottom: 25px;
+}
+.node-form .form-checkboxes .form-item,
+.node-form .form-radios .form-item {
+    margin-bottom: 0;
+}
+.text-format-wrapper {
+    margin-bottom: 25px;
+}
+.text-format-wrapper a.ckeditor_links,
+.text-format-wrapper .filter-wrapper {
+    display: none !important;
+}
+
+/* ==========================================================================
+   BLOCKS
+   ========================================================================== */
+.block-is-empty {
+    margin-bottom: 20px;
+    padding-top: 30px;
+    height: 50px;
+    text-align: center;
+    border: 1px dashed #999;
+}
+.block-no-admin .contextual-links-wrapper {
+    display: none !important;
+}
+.contextual-links-region-active {
+    outline: none;
+}
+
+
+/* ==========================================================================
+   CONTEXTUAL LINKS
+   ========================================================================== */
+div.contextual-links-wrapper ul.contextual-links {
+    padding: 0;
+}
+ul.contextual-links li a {
+    margin: 0;
+    padding: 7px 8px 5px;
+}
+
+/* ==========================================================================
+   VIEWS
+   ========================================================================== */
+.views-ui-display-tab-actions .ctools-button-processed li a,
+.views-ui-display-tab-actions .ctools-button-processed input {
+    color: inherit;
+}
+
+
+/* ==========================================================================
+   WEBFORM
+   ========================================================================== */
+.page-node-webform-results .content {
+    position: relative;
+    z-index: 10;
+}
+
+/* ==========================================================================
+   MEDIAS
+   ========================================================================== */
+#scald-atom-add-form-add .form-managed-file .form-submit,
+#views-exposed-form-scald-atoms-page-1 .form-item-uid .description,
+.dnd-library-wrapper .editor-item .links,
+.atom_reference_operations .ctools-link {
+    display: none;
+}
+#scald-atom-add-form-source .form-text,
+#scald-atom-add-form-source .form-select {
+    width: auto;
+}
+.atom_reference_operations {
+    margin-top: 5px;
+}
+.dnd-library-wrapper .editor-item .links {
+    position: static;
+}
+.atom_reference_drop_zone {
+    display: table;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    overflow: hidden;
+}
+.atom_reference_drop_zone em {
+    display: table-cell;
+    vertical-align: middle;
+}
+#scald-atom-add-form-options .form-text {
+    width: auto;
+}
+.image-widget-data {
+    clear: both;
+}
+.image-widget-data .form-item {
+    margin-top: 15px;
+}
+
+/* ==========================================================================
+   JQUERY UI
+   ========================================================================== */
+div.horizontal-tabs ul.horizontal-tabs-list {
+    border-right: 0;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+div.horizontal-tabs ul.horizontal-tabs-list li {
+    padding: 0;
+    background: #dedede;
+    border: 0;
+}
+div.horizontal-tabs ul.horizontal-tabs-list li:hover,
+div.horizontal-tabs ul.horizontal-tabs-list li:focus {
+    background: #dedede;
+}
+div.horizontal-tabs ul.horizontal-tabs-list li.selected {
+    padding: 0;
+    background: #fff;
+}
+div.horizontal-tabs ul.horizontal-tabs-list li.selected:hover,
+div.horizontal-tabs ul.horizontal-tabs-list li.selected:focus {
+    background: #fff;
+}
+div.horizontal-tabs ul.horizontal-tabs-list li a:hover {
+    color: #000;
+    background: #fff;
+}
+div.horizontal-tabs ul.horizontal-tabs-list li a,
+div.horizontal-tabs ul.horizontal-tabs-list li.selected a {
+    padding: 10px 20px;
+}
+
+div.horizontal-tabs .horizontal-tabs-panes fieldset.horizontal-tabs-pane {
+    margin-top: -5px;
+    margin-bottom: 0;
+    padding: 20px;
+}
+.ui-accordion .ui-accordion-header {
+    margin-top: 5px;
+    background: #eee;
+    border-radius: 0;
+}
+.ui-accordion .ui-accordion-header.ui-state-active,
+.ui-accordion .ui-accordion-header.ui-state-hover {
+    background-color: #fff;
+}
+.ui-accordion .ui-accordion-header.ui-state-active {
+    border-bottom: 0;
+}
+.ui-accordion .ui-corner-all {
+    border-radius: 0;
+}
+div.field-group-htabs-wrapper .ui-accordion .ui-accordion-content.field-group-format-wrapper {
+    padding: 20px;
+    border-radius: 0;
+}

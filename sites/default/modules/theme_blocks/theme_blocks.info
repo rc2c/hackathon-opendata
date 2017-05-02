@@ -1,0 +1,5 @@
+name = THEME - Blocks
+description = Gestion des blocs
+package = THEME
+version = VERSION
+core = 7.x

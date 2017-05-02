@@ -1,0 +1,80 @@
+/**
+ * Config
+ */
+var chartContainer = $('#%chartContainerId%');
+var chartContainerHeight = 500;
+
+chartContainer.height(chartContainerHeight);
+
+/**
+ * Formulaire
+ */
+var chartForm = '<form>' +
+    '<p>Choix de l\'année :</p>' +
+    '<div class="btn-group mr-1" data-toggle="buttons" aria-label="First group">' +
+        '<label class="btn btn-outline-secondary active" for="chart-form-item-2015">' +
+            '<input class="form-radio" type="radio" id="chart-form-item-2015" name="chart-form-item" value="2015" checked /> 2015' +
+        '</label>' +
+        '<label class="btn btn-outline-secondary" for="chart-form-item-2016">' +
+            '<input class="form-radio" type="radio" id="chart-form-item-2016" name="chart-form-item" value="2016" /> 2016' +
+        '</label>' +
+    '</div>' +
+'</form>';
+
+$('#%chartFormId%').html(chartForm);
+
+
+/**
+ * Init
+ */
+MultibarD3();
+$('#%chartFormId%').find('.form-radio').on('change', function() {
+    MultibarD3($(this).val());
+});
+
+function MultibarD3(year)
+{
+    var data = JSON.parse('%jsonData%');
+    data = data[0];
+
+    if (year === undefined) {
+        year = $('#%chartFormId%').find('.form-radio:checked').val();
+    }
+
+    var dataTemp = data.filter(function(e) {
+        var muDate = new Date(e.mu_date);
+        if (muDate.getFullYear() == year) {
+            return e;
+        }
+    });
+
+    var datanest = d3.nest()
+        .key(function(d) { return d.mu_region; })
+        .rollup(function(v) { return [{
+                label: "entrées",
+                value: d3.sum(v, function(g) {return g.mu_quantite; })
+            }];
+        })
+        .entries(dataTemp);
+
+    nv.addGraph(function() {
+        chart = nv.models.multiBarHorizontalChart()
+            .x(function(d) { return d.label })
+            .y(function(d) { return d.value })
+            .duration(250)
+            .stacked(true)
+            .showControls(true)
+            .height(chartContainerHeight);
+
+       chart.yAxis.tickFormat(d3.format(',.0f'));
+       chart.yAxis.axisLabel('Nombre de visite').axisLabelDistance(0);
+
+        d3.select('#%chartContainerId% svg')
+            .datum(datanest)
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+
+        return chart;
+    });
+}

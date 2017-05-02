@@ -1,0 +1,11 @@
+name = __Globale
+core = 7.x
+package = Hackathon
+dependencies[] = data
+dependencies[] = datasource
+dependencies[] = dataviz
+dependencies[] = feature_user
+dependencies[] = hackaton_api_connectors
+dependencies[] = theme_blocks
+dependencies[] = theme_hook
+features[features_api][] = api:2

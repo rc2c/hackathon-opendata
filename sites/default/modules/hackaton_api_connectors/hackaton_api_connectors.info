@@ -1,0 +1,5 @@
+name = API Connectors
+description = Permet de se connecter à différentes APIs
+package = Hackathon
+version = VERSION
+core = 7.x

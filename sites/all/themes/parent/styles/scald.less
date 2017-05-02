@@ -1,0 +1,289 @@
+.dnd-library-wrapper {
+	display: none;
+}
+
+
+.atom_reference_drop_zone {
+	cursor: pointer;
+
+	&:hover {
+		background-color: @color-background-secondary;
+	}
+}
+
+
+.scald-custom {
+	position: fixed;
+	z-index: 800;
+	top: @grid-gutter + 32px;
+	left: @grid-gutter;
+	right: @grid-gutter;
+	bottom: @grid-gutter;
+	padding: 114px 0 0 0;
+	visibility: hidden;
+	display: none;
+	overflow: scroll;
+	background-color: @color-background;
+	box-sizing: border-box;
+
+	.view-sticky {
+		position: fixed;
+		z-index: 801;
+		top: @grid-gutter + 32px;
+		left: @grid-gutter;
+		right: @grid-gutter;
+
+		h2 {
+			background: @color-primary;
+			color: #fff;
+			margin: 0;
+			padding: 10px @grid-gutter;
+			font-size: 24px;
+		}
+
+		.scaldCustom-close {
+			position: absolute;
+			z-index: 100;
+			top: 9px;
+			right: 16px;
+			width: 30px;
+			height: 30px;
+		}
+	}
+
+
+		.view-filters {
+			z-index: 100;
+
+			form {
+				margin: 0;
+			}
+			.views-widget-sort-by {
+				display: none;
+			}
+		}
+
+	.view-header {
+		padding: @grid-gutter @grid-gutter 0;
+	}
+
+	.view-content {
+		padding: @grid-gutter;
+	}
+}
+.is-scaldCustom-opened {
+	background: #000;
+	overflow: hidden;
+	
+	.page {
+		opacity: .2;
+	}
+	.scald-custom {
+		visibility: visible;
+		display: block;
+	}
+}
+
+.scaldCustom-add { 
+	overflow: hidden;
+
+	li {
+		float: left;
+
+		a {
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+	.legend {
+		margin-right: 12px;
+	}
+	.add {
+		& + .add {
+			&:before {
+				content: ' | ';
+				margin: 0 8px;
+				color: @color-border;
+			}
+		}
+	}
+}
+
+.scaldCustom-list { @grid: 20px;
+	.col-wrapper(@grid);
+
+	.scald-item { @col: 2;
+		.col-item();
+		.col(@col, @grid, @grid, @grid);
+
+		@media screen and (max-width: 1280px) {
+			width: 20%;
+		}
+
+		.scald-wrapper {
+			position: relative;
+			border: 2px solid @color-border;
+			background-color: @color-background-secondary;
+			cursor: pointer;
+			transition: .3s;
+		}
+
+		.scald-media {
+			padding-top: 100%;
+			background: no-repeat center;
+			background-size: cover;
+			transition: .3s;
+
+			img {
+				display: none;
+			}
+		}
+		.scald-title {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			padding: 7px 10px;
+			.font(primary, bold);
+			.font-size(13);
+			line-height: 1.1;
+			background-color: @color-background;
+			border-top: 2px solid @color-border;
+			word-break: break-all;
+		}
+		.scald-type {
+			position: absolute;
+			top: 0;
+			left: 0;
+			padding: 2px 6px;
+			background-color: fade(#000, 40%);
+			color: #fff;
+			.font-size(12);
+		}
+
+		.scald-actions {
+			position: absolute;
+			top: 50%;
+			left: 0;
+			right: 0;
+			transform: translateY(-50%);
+			margin-top: -12px;
+			text-align: center;
+			visibility: hidden;
+
+			.btn {
+				width: 75%;
+				border-color: #fff;
+				color: #fff;
+				background-color: transparent;
+				.font(primary, bold);
+
+				&:hover {
+					background-color: #fff;
+					color: #000;
+				}
+
+				& + .btn {
+					margin: 10px 0 0 0;
+				}
+			}
+		}
+
+		&:hover {
+			.scald-media {
+				opacity: .8;
+			}
+		}
+
+		&.is-selected {
+			.scald-wrapper {
+				background-color: @color-primary;
+			}
+			.scald-media {
+				opacity: .4;
+			}
+			.scald-actions {
+				visibility: visible;
+			}
+		}
+	}
+}
+
+
+div.ctools-sample-modal-content {
+	width: 1000px !important;
+	height: 500px !important;
+
+	& > table {
+		height: 100%;
+	}
+	.popups-border,
+	.wizard-trail,
+	.form-item-atom0-scald-actions,
+	.form-item-atom0-scald-actions {
+		display: none;
+	}
+	.plupload-form-processed {
+		.form-item-scald-authors,
+		.form-item-scald-tags {
+			display: none;
+		}
+	}
+
+	.modal-content {
+		width: 950px !important;
+		height: 400px !important;
+		margin: 0 auto;
+	}
+
+	div.popups-title {
+		background-color: @color-primary;
+		border: none;
+	}
+
+	.atom-wrapper > .form-item {
+		margin-bottom: @v-align / 2;
+	}
+
+	.form-item {
+		label {
+			float: none;
+		}
+	}
+}
+
+.plupload_wrapper {
+	font-size: 1em;
+	font-family: inherit;
+}
+.plupload_content {
+	.plupload_filelist_header,
+	.plupload_filelist_footer {
+		border: none;
+		background-color: @color-background-muted;
+		//color: #fff;
+		padding: @table-padding-vertical @table-padding-horizontal;
+	}
+	.plupload_filelist_header {
+		border-bottom: 1px solid @color-border;
+	}
+	.plupload_filelist_footer {
+		border-top: 1px solid @color-border;
+	}
+
+	.plupload_button, 
+	.plupload_button:hover {
+		//color: #fff;
+	}
+
+	.plupload_filelist {
+		li {
+			background: transparent;
+			padding: @table-padding-vertical @table-padding-horizontal;
+		}
+		.plupload_file_name {
+			width: auto;
+		}
+	}
+}

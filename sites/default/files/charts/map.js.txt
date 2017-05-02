@@ -1,0 +1,250 @@
+/**
+ * Config
+ */
+var chartContainerId = $('%chartContainerId%');
+var chartContainerHeight = 700;
+chartContainerId.height(chartContainerHeight);
+
+var toPlot = {};
+var mapdata = "/sites/default/files/charts/municipales-2014-2.csv";
+var topofile = "/sites/default/files/charts/bureau_vote_wgs84_simply.json";
+var unit = "%";
+var arrond = d3.format(".2f");
+
+/**
+ * Formulaire
+ */
+var chartForm = '<form>' +
+    '<div class="form-item form-checkboxes">' +
+        '<label>Choix du candidat :</label>' +
+        '<div class="form-item">' +
+            '<input class="form-radio" type="radio" id="chart-form-item-PCALJ" name="chart-form-item" value="PCALJ" checked />' +
+            '<label for="chart-form-item-PCALJ">A-L. Jaumouillié</label>' +
+        '</div>' +
+        '<div class="form-item">' +
+            '<input class="form-radio" type="radio" id="chart-form-item-PCJFF" name="chart-form-item" value="PCJFF" />' +
+            '<label for="chart-form-item-PCJFF">J-F. Fountaine</label>' +
+        '</div>' +
+        '<div class="form-item">' +
+            '<input class="form-radio" type="radio" id="chart-form-item-PCDroite" name="chart-form-item" value="PCDroite" />' +
+            '<label for="chart-form-item-PCDroite">D. Morvant</label>' +
+        '</div>' +
+    '</div>' +
+'</form>';
+
+$('#%chartFormId%').html(chartForm);
+
+var windowsLegend = $('<div>', {id : 'legend-'+chartContainerId, class : 'legend'});
+windowsLegend.css({ /*overflow: "auto",*/ position:"absolute",float:'left',display: 'inline-block', padding: '5px', background: '#fff','border-color':'#0F0','border-radius':'5px',top: '50px',width:'270px',height:'260px', left:'1em','z-index':'999'});
+chartContainerId.append(windowsLegend);
+
+var windowsPie = $('<div>', {id : 'Pie-'+chartContainerId, class : 'pie'});
+windowsPie.css({ /*overflow: "auto",*/ position:"absolute",float:'left',display: 'inline-block', padding: '5px', background: '#FFF','border-color':'#666','border-radius':'5px',top: '320px',width:'320px',height:'300px', left:'1em','z-index':'999'});
+chartContainerId.append(windowsPie);
+
+/**
+ * Init
+ */
+MapD3();
+$('#%chartFormId%').find('.form-radio').on('change', function() {
+    MapD3();
+});
+
+
+function MapD3()
+{
+    $("#legend-"+chartContainerId ).empty();
+    var iVar = null;
+    // var iVar = d3.select("#radioType-"+chartContainerId+":checked").node().value
+    // if (iVar == "PCALJ") {var colorRef="#d35f5f"}
+    // if (iVar == "PCJFF") {var colorRef="#ff7f2a"}
+    // if (iVar == "PCDroite") {var colorRef="#00aad4"}
+
+    plotmap(mapdata, topofile,colorRef,iVar,unit);
+
+}
+
+function plotmap(file,topofile,colorRef,ivar,unit)
+{
+    queue()
+        .defer(d3.json, topofile)
+        .defer(d3.csv, mapdata)
+        .await(ready);
+
+    function ready(error,geo, data) {
+        var obj = document.getElementById("chart-"+Idcontainer)
+        var height = obj.clientHeight;
+        var width = obj.clientWidth;
+        var zoom = 600000;
+
+        // Création un nouvel objet path qui permet de manipuler les données géographiques.
+        var path = d3.geo.path();
+        var projection = d3.geo.conicConformal()
+            .center([ -1.16, 46.155])
+            .scale(zoom)
+            // .translate([width/2, height/2])
+            path.projection(projection); // On assigne la projection au path
+
+        // Gestion du zoom avec la souris
+        var zoom = d3.behavior.zoom()
+            .translate([0, 0])
+            .scale(1)
+            .scaleExtent([1, 2.2])
+            .on("zoom", zoomed);
+
+        function zoomed() {
+            svg.style("stroke-width", 1.5 / d3.event.scale + "px");
+            svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            scale = d3.event.scale;
+        }
+
+        var svg = d3.select('#%chartContainerId% svg')
+            .attr("height", height);
+
+        var rateById = {};
+        var nameById = {};
+
+        var dataAll = data;
+        data.forEach(function(d) {
+            // on récupère la colonne qui correspond à ivar
+            rateById[d.id] = +d[ivar];
+            nameById[d.id] = d.id;
+        });
+
+        var max = d3.max(data, function(d) { return +d[ivar]; });
+        var min = d3.min(data, function(d) { return +d[ivar]; });
+        var scale = d3.scale.linear().range([min, max]);
+
+        // Création de l'échelle de couleurs en ajoutant brighter/darker à la couleur de base
+        var color = d3.rgb(colorRef);
+        var color_domain = [ scale(0), scale(0.2), scale(0.4), scale(0.6), scale(0.8), scale(1)];
+        var legend_labels = [ "["+arrond(scale(0))+unit +" - "+arrond(scale(0.2))+unit+"[","["+arrond(scale(0.2))+unit +" - "+arrond(scale(0.4))+unit+"[","["+arrond(scale(0.4))+unit +" - "+arrond(scale(0.6))+unit+"[","["+arrond(scale(0.6))+unit +" - "+arrond(scale(0.8))+unit+"[","["+ arrond(scale(0.8))+unit +" - "+arrond(scale(1))+unit+"[", ">=" + arrond(scale(1))+unit ];
+        var color = d3.scale.threshold()
+            .domain(color_domain)
+            .range([color.brighter(3),color.brighter(2),color.brighter(1),color,color.darker(1),color.darker(2),color.darker(3)]);
+
+        geo = topojson.feature(geo, geo.objects.secteurs);
+
+        var MapTooltip = d3.select("body").append("div")
+            .style("position","absolute")
+            .style("width","150px")
+            .style("padding:","2px")
+            .style("visibility", "hidden")
+            .style("text-align", "center")
+            .style("background", "#ccc")
+            .style("border","1px")
+            .style("border-color","#F00")
+            .style('font-family', 'Raleway')
+            .style('color','#666')
+            .style('font-size','14px')
+            .style("border-radius", "5px")
+            .style("pointer-events","none");
+
+        svg.append("g")
+            .attr("class", "id")
+            .selectAll("path")
+            .data(geo.features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .attr("stroke", "#00F")
+            .attr('stroke-width', '0px')
+            .attr('fill','#ccc')
+            .attr("transform", "translate(7,0)")
+
+        svg.append("g")
+            .attr("class", "id")
+            .selectAll("path")
+            .data(geo.features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .attr("stroke", "#FFF")
+            .attr('stroke-width', '0.5px')
+            .style("fill", function(d) {return color(rateById[d.properties["ebc_numero"]]); })
+            .style("opacity", 1)
+            .on("mouseover", function(d) {
+                // Gestion du mousover de la map : Affichage du MapTooltip
+                MapTooltip.transition().duration(200);
+                content = "<b>"+d.properties["ebc_nom"]+"<b><br>"+ rateById[d.properties["ebc_numero"]] + "%";
+                MapTooltip
+                    .html(content)
+                    //.html(d.properties.id +'<br>' + "test" + '<br><br><b>'  + arrond(rateById[typeSect+'-'+d.properties[typesect]]) + unit + '</b>')
+                    .style("visibility", "visible")
+                    .style("left", (d3.event.pageX) +50 + "px")
+                    .style("top", (d3.event.pageY - 50) + "px");
+                })
+                .on("mouseout", function(d) {
+                    // Gestion du mouseout de la map : Destruction du InfoBoxTooltip
+                    MapTooltip.style("visibility", "hidden")
+                })
+                .on("click", function(d) {
+                    svg.selectAll("path").style("opacity",1)
+                    d3.select(this).style("opacity",0.4);
+                    $("#Pie-"+Idcontainer ).empty();
+
+                    dataTemp = dataAll.filter(function(e) {
+                        if (e.id == d.properties["ebc_numero"]) {
+                            return e;
+                        }
+                    })[0];
+                    dataTemp = [
+                        {id:"AL Jaum.", value:dataTemp.NbALJ, color:"#d35f5f"},
+                        {id:"JJ Font.", value:dataTemp.NbJFF, color:"#ff7f2a"},
+                        {id:"D Morv.", value:dataTemp.NbDroite, color:"#00aad4"}
+                    ];
+
+                nv.addGraph(function(d) {
+                    var chart = nv.models.pieChart()
+                        .x(function(d) { return  d.id })
+                        .y(function(d) { return parseInt(d.value) })
+                        .labelType("percent")
+                        .showLabels(true)
+                        .width(300)
+                        .height(300)
+                        .donut(true)
+                        //.fillOpacity(1)
+                        .color(function(d) {return d.color })
+                        .showLegend(true)
+
+                chart.valueFormat(d3.format(',.0f'));
+
+                svg1 = d3.select('#Pie-'+Idcontainer).append("svg")
+                    .datum(dataTemp)
+
+                .call(chart);
+                return chart;
+
+            }); // fin nv.addGraph
+
+            });
+
+
+        var legend1 = d3.select("#legend-"+Idcontainer)
+                .append("svg")
+                .attr("height", 42*color_domain.length)
+                .append("g")
+        legend1.selectAll('rect')
+          .data(color_domain)
+          .enter()
+          .append("rect")
+          .attr("x", 30)
+          .attr("y", function(d, i){return 20+i *  40;})
+          .attr("rx", 4)
+          .attr("ry", 4)
+          .attr("width",30)
+          .attr("height", 25)
+          .style("fill", function(d,i) {return color(d);})
+
+        legend1.selectAll('text')
+          .data(color_domain)
+          .enter()
+          .append("text")
+          .attr("x", 80)
+          .attr("y", function(d, i){var y= 20+i*40; console.log(y);return  40 +i*40;})
+          .text(function(d,i) {return legend_labels[i];})
+                .style('fill','#333')
+                .style('font-family', 'Arial')
+                .style('font-size', '14px')
+    } // End de ready
+}

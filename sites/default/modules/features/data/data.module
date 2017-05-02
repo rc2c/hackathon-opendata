@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Fiche de données feature.
+ */
+
+include_once 'data.features.inc';

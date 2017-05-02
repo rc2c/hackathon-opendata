@@ -1,0 +1,64 @@
+; THEME
+name        = Child
+description = Thème enfant
+
+
+; BASE THEME
+core        = 7.x
+base theme  = parent
+
+
+; CSS
+stylesheets[all][] = vendors/core_ui_drupal/css/font-awesome.min.css
+stylesheets[all][] = vendors/core_ui_drupal/css/simple-line-icons.css
+stylesheets[all][] = vendors/core_ui_drupal/css/style.css
+stylesheets[all][] = styles/dist/theme.css
+
+
+; JAVASCRIPT
+scripts[] = js/libs/spinner.min.js
+scripts[] = js/theme.js
+scripts[] = vendors/core_ui_drupal/js/tether.min.js
+scripts[] = vendors/core_ui_drupal/js/bootstrap.min.js
+scripts[] = vendors/core_ui_drupal/js/pace.min.js
+;scripts[] = vendors/core_ui_drupal/js/Chart.min.js
+scripts[] = vendors/core_ui_drupal/js/app.js
+
+
+; REGIONS
+regions[header]         = Header
+regions[navigation]     = Navigation bar
+regions[content_top]    = Content top
+regions[content]        = Content
+regions[content_front]  = Content front
+regions[content_views]  = Content views
+regions[content_bottom] = Content bottom
+regions[sidebar_first]  = First sidebar
+regions[sidebar_second] = Second sidebar
+regions[footer]         = Footer
+
+; The page_top and page_bottom regions are hidden, which means they will not
+; show up on the blocks administration page. But they are required in order for
+; the html.tpl.php to work properly, so do not delete them.
+regions[page_top]       = Page top
+regions[page_bottom]    = Page bottom
+
+
+; FEATURES
+features[] = logo
+features[] = name
+features[] = slogan
+features[] = node_user_picture
+features[] = comment_user_picture
+features[] = favicon
+features[] = main_menu
+features[] = secondary_menu
+
+; SETTINGS
+; To make this sub-theme an admin theme with shortcut links next to titles,
+; uncomment the line below.
+;settings[shortcut_module_link]    = 1
+
+; To add a Panels layout (which can also be used by Display Suite), uncomment
+; the line below and see the documentation at: https://drupal.org/node/495654
+;plugins[panels][layouts] = panels-layouts

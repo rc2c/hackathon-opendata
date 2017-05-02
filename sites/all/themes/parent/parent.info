@@ -1,0 +1,33 @@
+; THEME
+name        = Thème parent
+description = 
+
+
+; BASE THEME
+core        = 7.x
+engine      = phptemplate
+
+
+; CSS
+stylesheets[all][] = system.messages.css
+stylesheets[all][] = system.theme.css
+
+
+; JAVASCRIPT
+scripts[] = js/libs/fitvids.js
+scripts[] = js/libs/cookie-notice.min.js
+scripts[] = js/default.js
+
+
+; REGIONS
+regions[header]         = Header
+regions[navigation]     = Navigation bar
+regions[highlighted]    = Highlighted
+regions[help]           = Help
+regions[content]        = Content
+regions[sidebar_first]  = First sidebar
+regions[sidebar_second] = Second sidebar
+regions[footer]         = Footer
+regions[bottom]         = Page bottom
+regions[page_top]       = Page top
+regions[page_bottom]    = Page bottom
